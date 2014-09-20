@@ -2,6 +2,7 @@
 <widget id = "sv.com.chuckle.arkad"
 		xmlns = "http://www.w3.org/ns/widgets"
 		xmlns:gap = "http://phonegap.com/ns/1.0"
+		xmlns:android   = "http://schemas.android.com/apk/res/android"
 		version = "1.0.0">
 	<name>HDH Móvil</name>
 	<description>Aplicación interna para captación de formularios de créditos.</description>
