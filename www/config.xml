@@ -14,6 +14,9 @@
 						android:normalScreens="true" 
 						android:largeScreens="true" 
 						android:xlargeScreens="true" />
+	<activity 	android:launchMode="singleInstance"
+				android:screenOrientation="landscape"
+				android:alwaysRetainTaskState="true" />
 </gap:config-file>
 
 <!--
@@ -25,11 +28,10 @@ permission on your app, which PhoneGap requires.
 <!-- Customize your app and platform with the preference element. -->
 <preference name="phonegap-version" value="3.5.0" /> <!-- all: current version of PhoneGap -->
 <preference name="orientation" value="landscape" /> <!-- all: default means both landscape and portrait are enabled -->
-<preference name="target-device" value="tablet" /> <!-- all: possible values handset, tablet, or universal -->
+<preference name="target-device" value="universal" /> <!-- all: possible values handset, tablet, or universal -->
 <preference name="fullscreen" value="true" /> <!-- all: hides the status bar at the top of the screen -->
 <preference name="android-minSdkVersion" value="10" /> <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
 <preference name="android-installLocation" value="auto" /> <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
-<preference name="android-windowSoftInputMode" value="adjustResize" />
 
 <!-- Plugins -->
 <!-- Core plugins -->
