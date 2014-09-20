@@ -8,16 +8,11 @@
 	<author href="http://www.arkad.com.sv" email="info@arkad.com.sv">Arkad Studio</author>
 <!-- Main Configuration -->
 <gap:config-file platform="android" parent="/manifest">
-<supports-screens
-android:anyDensity="true" android:resizeable="true" 
-android:smallScreens="true" 
-android:normalScreens="true" 
-android:largeScreens="true" 
-android:xlargeScreens="true" />
-<activity
-android:launchMode="singleInstance"
-android:screenOrientation="landscape"
-android:alwaysRetainTaskState="true" />
+	<supports-screens 	android:anyDensity="true" android:resizeable="true" 
+						android:smallScreens="true" 
+						android:normalScreens="true" 
+						android:largeScreens="true" 
+						android:xlargeScreens="true" />
 </gap:config-file>
 
 <!--
