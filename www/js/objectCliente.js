@@ -90,15 +90,19 @@ function Cliente(){
 		nivelEducativo = $('#cb_nivelEducativo').find('option:selected').val();
 		noHijos = $('#txt_numeroHijos').val();
 		estadoCivil = $('#cb_estadoCivil').find('option:selected').val();	
-		patrimonio = $('#mt_patrimonio').html();
+		patrimonio = $('#hd_patrimonio').val();
 	}
 }//fin clase
 
-function UserLogin(){
+function UserLogin() {
 	var nombre;
 	var pass;
 	var userid;
 	var rolename;
+	var companyName;
+	var companyId;
+	var companyPlace;
+	var nombreCompleto;
 	
 	this.setNombre = function(nombre){
 		this.nombre = nombre;
@@ -106,6 +110,14 @@ function UserLogin(){
 	
 	this.getNombre = function(){
 		return this.nombre;
+	}
+	
+	this.setNombreCompleto = function(nombreCompleto) {
+		this.nombreCompleto = nombreCompleto
+	}
+	
+	this.getNombreCompleto = function() {
+		return this.nombreCompleto;
 	}
 	
 	this.setPass = function(pass){
@@ -130,6 +142,30 @@ function UserLogin(){
 	
 	this.getRolename = function(){
 		return this.rolename;
+	}
+	
+	this.setCompanyName = function(companyName){
+		this.companyName = companyName;
+	}
+	
+	this.getCompanyName = function() {
+		return this.companyName;
+	}
+	
+	this.setCompanyId = function(companyId){
+		this.companyId = companyId;
+	}
+	
+	this.getCompanyId = function() {
+		return this.companyId;
+	}
+	
+	this.setCompanyPlace = function(companyPlace){
+		this.companyPlace = companyPlace;
+	}
+	
+	this.getCompanyPlace = function() {
+		return this.companyPlace;
 	}
 	
 }//fin UserLogin

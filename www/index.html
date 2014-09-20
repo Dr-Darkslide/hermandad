@@ -1,14 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=low-dpi" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/themes/Hermandad.min.css" />
         <link rel="stylesheet" type="text/css" href="css/themes/jquery.mobile.structure-1.4.2.min.css" />
         <link rel="stylesheet" type="text/css" href="css/themes/jquery.mobile.icons.min.css" />
         <link rel="stylesheet" type="text/css" href="css/listviewsCustom.css" />
-        <link href="css/estilo-captador.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.numbox-1.1.1.css" />
+		<!-- Usamos un nuevo elemento para paginado -->
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.iscrollview.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.iscrollview-pull.css" media="screen" />
+		<!-- Diseño del sitio completo -->
+        <link rel="stylesheet" type="text/css" href="css/estilo-captador.css" />
         <title>HDH Móvil</title>
     </head>
     <body>
@@ -50,8 +55,11 @@
 					<img src="images/bot-home2.png" onclick="paginaActual=2;irOpcion('clientes_list');return false;"/>
 			  	</div>
 			  	<div class="bot-home3">
-					<img src="images/bot-home3.png" onclick="paginaActual=3;irOpcion('clientes_list');return false;"/>
+					<img src="images/bot-home3.png" onclick="paginaActual=3;irOpcion('clientes_list_factura');return false;"/>
 			  	</div>
+				<div class="bot-home4">
+						<img src="images/bot-home4.png" onclick="paginaActual=4;irOpcion('clientes_list_remesas');return false;"/>
+			  		</div>
 			  	<div class="avisos"><span id="sp_mensaje"></span></div>
 			</div><!-- /content -->
 		</div>
@@ -59,11 +67,11 @@
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_clientes_list">
 			<div class="interna">
 				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					<div class="logo-home"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 				<div class="head-clientes">
 					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> <span id='lb_cliente'>Clientes</span></div>
@@ -79,81 +87,102 @@
 						</table>
 					</div>
 				</div>
-				<div class="cuerpo-interna" style="overflow: scroll;height: 400px;">
+				<div class="cuerpo-interna" style="overflow: scroll;height: 520px;">
 				    <div id="grid-clients" class="grid-view">
-						<table border="1" style="width:100%;border-collapse:collapse;" class="table-striped table-bordered ui-responsive"
-							data-filter="true" data-input="#txt_findCliente" data-role="table">
+						<div id="fctnc" style="text-align:right;float: right;margin-right: 1%;display:none;"><a data-role="button" data-theme="b" href="#" onclick="irOpcion('facturacion');return false;">Facturar no Cliente</a></div>
+						<table border="1" style="width:100%;border-collapse:collapse;" id="tblClients" class="table-striped table-bordered ui-responsive"
+							data-filter="false" data-input="#txt_findCliente" data-role="table">
 							<thead>
 							<tr>
-								<th >&nbsp;</th><th>#</th><th>Primer Nombre</th><th>Primer Apellido</th><th>No. Identidad</th><th>&nbsp;</th>
+								<th>&nbsp;</th><th>#</th><th>Cod. Cliente</th><th>Primer Nombre</th><th>Primer Apellido</th><th>No. Identidad</th><th>&nbsp;</th>
 							</tr>
 							</thead>
 							<tbody id="ul_detalleCliente_list"></tbody>
 						</table>
+						<input type="hidden" name="hdnpag" id="hdnpag" value="0" />
+						<input type="button" id="btnpagcli" data-role="button" onclick="cargarListaCliente(0,$('#hdnpag').val(),250,0);return false;" value="Cargar más información" />
 					</div>
 				</div>
 			</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
 			</div>
 	    </div>
+		
 		<!-- PAGE clientes-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_clientes">
-		<div class="interna">
-			<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
-			</div>
-			<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Información del Cliente</div>
-			</div>
-			<div role="main" class="cuerpo-interna" id="div_datosGenerales"></div><!-- /content -->
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_datosGenerales');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		</div>
-		<!-- PAGE creditos-->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_creditos">
-		<div class="interna">
-			<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+			<div class="interna">
+				<div class="header">
+						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Solicitud de Credito</div>
+						<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Información del Cliente</div>
 				</div>
-			<div role="main" class="cuerpo-interna" id="div_datosCreditos"></div>
-			<div data-role="popup" id="dlgCotizador" data-overlay-theme="a" data-theme="a" style="max-width:600px;" class="ui-corner-all">
-				<div data-role="header" data-theme="a" class="ui-corner-top">
-					<h1>Cotizador Crédito</h1>
+				<div role="main" class="cuerpo-interna" id="div_datosGenerales"></div><!-- /content -->
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosGenerales'); irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_datosGenerales');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
 				</div>
-				<div role="main" class="ui-corner-bottom ui-content">
-					<div id="frmCotiza"></div>
-					<a href="#" data-role="button" data-rel="back" data-theme="a">Cerrar</a>
-				</div>
-			</div>	
+			</div>
 		</div>
-		<div data-role="footer" data-position="fixed">
+		
+		<!-- PAGE creditos-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_creditos">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+				<div class="head-clientes">
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Solicitud de Cr&eacute;dito</div>
+				</div>
+				<div role="main" class="cuerpo-interna" id="div_datosCreditos"></div>
+				
+				<!-- popup para el cotizador -->
+				<div data-role="popup" id="dlgCotizador" data-overlay-theme="a" data-theme="a" style="max-width:600px;" class="ui-corner-all">
+					<div data-role="header" data-theme="a" class="ui-corner-top">
+						<h1>Cotizador Crédito</h1>
+					</div>
+					<div role="main" class="ui-corner-bottom ui-content">
+						<div id="frmCotiza"></div>
+						<a href="#" data-role="button" data-rel="back" data-theme="a">Cerrar</a>
+					</div>
+				</div>	
+			</div>
+			<div data-role="footer" data-position="fixed">
 		        <div data-role="navbar">
-		        	<ul>
+		        	<!-- <ul>
 		                <li><a href="#" data-theme="a" data-icon="user" onclick="irOpcion('fiduciario');return false;">GARANTIA FIDUCIARIA</a></li>
 		                <li><a href="#" data-theme="a" data-icon="location" onclick="irOpcion('hipotecaria');return false;">GARANTIA HIPOTECARIA</a></li>
 		                <li><a href="#" data-theme="a" data-icon="tag" onclick="irOpcion('prendaria');return false;">GARANTIA PRENDARIA</a></li>
 		                <li><a href="#" data-theme="a" data-icon="info" onclick="irOpcion('evalFinanciera');return false;">EVALUACION FINANCIERA</a></li>
 						<li><a href="#" data-theme="a" data-icon="check" onclick="irOpcion('resolucion');return false;">RESOLUCION</a></li>
+		            </ul> -->
+					<ul>
+		                <li><a href="#" data-theme="a" data-icon="user" data-gtype="fiduciario" onclick="irOpcion('garantias_list', false, this);return false;">GARANTIA FIDUCIARIA</a></li>
+		                <li><a href="#" data-theme="a" data-icon="location" data-gtype="hipotecaria" onclick="irOpcion('garantias_list', false, this);return false;">GARANTIA HIPOTECARIA</a></li>
+		                <li><a href="#" data-theme="a" data-icon="tag" data-gtype="prendaria" onclick="irOpcion('garantias_list', false, this);return false;">GARANTIA PRENDARIA</a></li>
+		                <li><a href="#" data-theme="a" data-icon="info" onclick="irOpcion('evalFinanciera');return false;">EVALUACION FINANCIERA</a></li>
+						<li><a href="#" data-theme="a" data-icon="check" onclick="irOpcion('resolucion');return false;">RESOLUCION</a></li>
 		            </ul>
 					<ul>
-		        		<li><a href="#" data-theme="b" data-icon="back" onclick="irOpcion('productos');return false;">Regresar</a></li>
-		        		<li><a href="#" data-theme="b" data-icon="plus" onclick="guardarFormulario('div_datosCreditos');return false;">Guardar</a></li>
+		        		<li><a href="#" data-theme="b" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('productos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+		        		<li><a href="#" data-theme="b" onclick="guardarFormulario('div_datosCreditos');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 		        	</ul>
 		        </div><!-- /navbar -->
 			</div><!-- /footer -->
@@ -162,778 +191,1080 @@
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_fiduciario">
 			<div class="interna">
 				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 				<div class="head-clientes">
 					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Aval Fiduciario</div>
 				</div>
+			<input type="hidden" name="credId_gtia_fidu" id="credId_gtia_fidu" value="0" />
 			<div role="main" class="cuerpo-interna" id="div_fiduciario"></div>
 		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('creditos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_fiduciario');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_fiduciario');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<!-- PAGE hipotecaria-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_hipotecaria">
 		<div class="interna">
 				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 				<div class="head-clientes">
 					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Garantía Hipotecaria</div>
 				</div>
+			<input type="hidden" name="credId_gtia_hipo" id="credId_gtia_hipo" value="0" />
 			<div role="main" class="cuerpo-interna" id="div_hipotecaria"></div>
 		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('creditos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_hipotecaria');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		<!-- PAGE ahorros-->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_ahorros">
-		<div class="interna">
-				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_hipotecaria');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
 				</div>
-				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Apertura de Cuenta de Ahorro</div>
-				</div>
-			<div role="main" class="cuerpo-interna" id="div_ahorros"></div>
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('productos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_ahorros');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		<!-- PAGE depositosPlazo-->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_depositosPlazo">
-		<div class="interna">
-				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
-				</div>
-				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Apertura de Deposito a Plazo</div>
-				</div>
-			<div role="main" class="cuerpo-interna" id="div_depositosPlazo"></div>
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('productos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_depositosPlazo');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		<!-- PAGE facturacion-->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_facturacion">
-		<div class="interna">
-				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
-				</div>
-				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Comprobante de Ingreso</div>
-				</div>
-			<div role="main" class="cuerpo-interna" id="div_facturacion">
-				<div data-role="collapsible" data-collapsed="false">
-					<h4>Datos</h4>
-					<table style="width: 100%;background-color:#cfcfcf;">
-						<tr>
-							<td width="33%">
-								<label for="txt_fac_nombre">1. Identidad:</label>
-								<input type="hidden" name="hd_fac_codCliente" id="hd_fac_codCliente" value="">
-								<input type="text" name="txt_fac_nombre" id="txt_fac_nombre" placeholder="" value="" readonly="readonly">
-							</td>
-							<td width="33%">
-								<label for="txt_fac_identidad">2. Nombre:</label>
-								<input type="text" name="txt_fac_identidad" id="txt_fac_identidad" placeholder="" value="" readonly="readonly">
-							</td>
-							<td width="33%">
-								<label for="txt_fac_fecha">Fecha:</label>
-								<input type="text" style="text-align: center;" readonly="readonly" name="txt_fac_fecha" id="txt_fac_fecha" placeholder="" value="">
-								<label for="txt_fac_usuario">Usuario:</label>
-								<input type="text" style="text-align: center;" readonly="readonly" name="txt_fac_usuario" id="txt_fac_usuario" placeholder="" value="" readonly="readonly">							
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="cb_fac_tipoTransaccion">Tipo de Transacci&oacute;n:</label>								
-								<select name="cb_fac_tipoTransaccion" id="cb_fac_tipoTransaccion">
-									<option value="1">Pago a Prestamo</option>
-									<option value="2">Deposito de Ahorro</option>
-									<option value="3">Nota de Cobro</option>
-									<option value="4">Seguro sobre deuda</option>
-									<option value="5">Avaluos</option>
-									<option value="6">Remesas</option>
-								</select>
-								<label for="txt_fac_tipoTrans">No. de Cuenta:</label>
-								<input type="text" name="txt_fac_tipoTrans" id="txt_fac_tipoTrans" placeholder="" value="" data-mini="true">
-								<label for="txt_fac_valor">Valor a Pagar:</label>
-								<input type="text" class="format_number" name="txt_fac_valor" id="txt_fac_valor" style="text-align: right;" placeholder="" value="" data-mini="true">
-								<input type="hidden" id='hd_seq' value="1"/>
-								<br />
-								<div style="width:100%;">
-									<a id="lnkFactDeta" data-theme="b" data-role="button" class="ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" 
-									href="#" role="button" onclick="agregarLineasFactura();return false;">Agregar</a>
-								</div>
-							</td>
-							<td colspan="2">
-								<table id="tbl-deta-fac" style="width: 100%">
-									<tr>
-										<th>
-											 Codigo
-										</th>
-										<th>
-											Tipo transaccion
-										</th>
-										<th>
-											N de Cuenta
-										</th>
-										<th>
-											Valor(L)
-										</th>
-										<th>
-											
-										</th>
-									</tr>
-									<tbody id="details">
-										<tr id="nothing">
-											<td colspan="4">
-												No Hay Ninguna Transaccion
-											</td>
-										</tr>
-									</tbody>
-									<tfoot>
-									<tr>
-										<td colspan="3" style="text-align:right">
-											 <strong>Total:</strong>
-										</td>
-										<td style="text-align:right">
-											<input type="hidden" name="txt_fac_total" id="txt_fac_total" value="0" />
-											 <span id="lbl_fac_total" class="format_number" style="font-weight:bold;">0.00</span>
-										</td>
-										<td>&nbsp;</td>
-									</tr>
-									</tfoot>
-								</table>
-							</td>
-						</tr>
-					</table>
-					
-				</div>
-			</div>
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_facturacion');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		<!-- PAGE evalFinanciera-->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_evalFinanciera">
-		<div class="interna">
-				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
-				</div>
-				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Evaluaci&oacute;n Financiera</div>
-				</div>	
-			<div role="main" class="cuerpo-interna" id="div_evalFinanciera">
-			<div data-role="collapsible" data-collapsed="false">
-				    <h4>Datos</h4>
-				    <table style="width: 100%; background-color:#cfcfcf;">
-				    	<tr>
-				    		<td width="33%">
-					    		<label for="txt_fidu_noIdentidad">No. De Identidad:</label>
-								<input type="text" name="txt_evalfin_noIdentidad" id="txt_evalfin_noIdentidad" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
-							</td>
-				    		<td width="33%">
-				    			<label for="txt_fidu_nombre">Nombre:</label>
-				    			<input type="text" name="txt_evalfin_nombre" id="txt_evalfin_nombre" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
-		   					</td>
-				    		<td width="33%">
-				    			<label for="txt_fidu_codCliente">Cod. Cliente:</label>
-				    			<input type="text" name="txt_evalfin_codCliente" id="txt_evalfin_codCliente" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
-		   					</td>	    					
-				    	</tr>
-			    	</table>
-			    </div>
-			<div data-role="collapsible" data-collapsed="false">
-					<h4>Balance General</h4>
-<table  style="width: 100%; background-color:#cfcfcf;" border="1" cellspacing="0" cellpadding="0" summary="Balance General">
-  <tr>
-    <td>4. Caja y Bancos:</td>
-    <td>&nbsp;</td>
-    <td align="right">
-      <input type="text" class="format_number" name="txt_bal_cajasyBancos" value="" placeholder="0.00" id="txt_bal_cajasyBancos" />
-    </td>
-  </tr>
-  <tr>
-    <td>5. Cuentas por Cobrar</td>
-    <td>&nbsp;</td>
-    <td align="right"><input type="text" class="format_number" name="txt_bal_cuentasxCobrar" value="" placeholder="0.00" id="txt_bal_cuentasxCobrar" /></td>
-  </tr>
-  <tr>
-    <td>6. Inventarios (mercad, Mat, Prima Proc, Tem)</td>
-    <td>&nbsp;</td>
-    <td align="right"><input type="text" class="format_number" name="txt_bal_inventario" value="" placeholder="0.00" id="txt_bal_inventario" /></td>
-  </tr>
-  <tr>
-    <td>7. Inversiones producción agropecuaria</td>
-    <td>&nbsp;</td>
-    <td align="right"><input type="text" class="format_number" name="txt_bal_invagro" value="" placeholder="0.00" id="txt_bal_invagro" /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td><strong>8. Total Activo Circulante</strong></td>
-    <td align="right"><input name="txt_bal_activoCirculante" class="format_number" value="" placeholder="0.00" type="text" id="txt_bal_activoCirculante" readonly="readonly" style="font-weight:bold;" /></td>
-  </tr>
-  <tr>
-    <td><strong>9. Activo Fijo (Patrimonio)</strong></td>
-    <td>&nbsp;</td>
-    <td align="right"><input name="txt_bal_patrimonio" class="format_number" type="text" placeholder="0.00" id="txt_bal_patrimonio" value="" readonly="readonly" style="font-weight:bold;"  /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td><strong>10. Total Activos</strong></td>
-    <td align="right"><input name="txt_bal_activos" class="format_number" type="text" placeholder="0.00" id="txt_bal_activos" value="" style="font-weight:bold;" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td align="right">&nbsp;</td>
-  </tr>
-  <tr>
-    <td>11. Cuentas por pagar</td>
-    <td>&nbsp;</td>
-    <td align="right"><input type="text" name="txt_bal_cuentasxPagar" class="format_number" value="" placeholder="0.00" id="txt_bal_cuentasxPagar" /></td>
-  </tr>
-  <tr>
-    <td>12. Proveedores</td>
-    <td>&nbsp;</td>
-    <td align="right"><input type="text" name="txt_bal_proveedores" class="format_number" value="" placeholder="0.00" id="txt_bal_proveedores" /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td><strong>13. Total Pasivo</strong></td>
-    <td align="right"><input name="txt_bal_pasivos" type="text" class="format_number" value="" placeholder="0.00" id="txt_bal_pasivos" style="font-weight:bold;" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>14. Capital</td>
-    <td>&nbsp;</td>
-    <td align="right"><input name="txt_bal_capital" type="text" class="format_number" value="" placeholder="0.00" id="txt_bal_capital"  style="font-weight:bold;" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td><strong>15. Total Pasivo + Capital</strong></td>
-    <td>&nbsp;</td>
-    <td align="right"><input name="txt_bal_total" type="text" class="format_number" value="" placeholder="0.00" id="txt_bal_total" style="font-weight:bold;" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td align="right">&nbsp;</td>
-  </tr>
-</table>
-
-</div>
-<div data-role="collapsible" data-collapsed="false">
-	  <h4>Estados de Resultados</h4>
-<table cellspacing="0" cellpadding="0" style="width: 100%; background-color:#cfcfcf;" border="1" >
-  <tr>
-    <td rowspan="2"><strong>16. Ventas Netas al Mes</strong></td>
-    <td rowspan="2">Bueno</td>
-    <td rowspan="2">Regular</td>
-    <td rowspan="2">Malo</td>
-    <td colspan="2" align="center">Mensual</td>
-    <td align="center">Anual</td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right"><input type="text" class="format_number" name="txt_res_sumaVenta" value="" placeholder="0.00"  style="font-weight:bold;" id="txt_res_sumaVenta" readonly="readonly" /></td>
-    <td align="right"><input type="text" class="format_number" name="txt_res_sumaVenta_anual" value="" placeholder="0.00"  style="font-weight:bold;" id="txt_res_sumaVenta_anual" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>17. Ventas al Contado</td>
-    <td><input type="text" class="format_number" name="txt_res_ventaContadoBueno" value="" placeholder="0.00" id="txt_res_ventaContadoBueno" /></td>
-    <td><input type="text" class="format_number" name="txt_res_ventaContadoRegular" value="" placeholder="0.00" id="txt_res_ventaContadoRegular" /></td>
-    <td><input type="text" class="format_number" name="txt_res_ventaContadoMalo" value="" placeholder="0.00" id="txt_res_ventaContadoMalo" /></td>
-    <td colspan="2"><input name="txt_res_sumaVentaContado" class="format_number" value="" placeholder="0.00" type="text" id="txt_res_sumaVentaContado" readonly="readonly" /></td>
-    <td align="right"><input name="txt_res_sumaVentaContado_anual" class="format_number" value="" placeholder="0.00" type="text" id="txt_res_sumaVentaContado_anual" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>18. Ventas al Credito</td>
-    <td><input type="text" class="format_number" name="txt_res_ventaCreditoBueno" value="" placeholder="0.00" id="txt_res_ventaCreditoBueno" /></td>
-    <td><input type="text" class="format_number" name="txt_res_ventaCreditoRegular" value="" placeholder="0.00" id="txt_res_ventaCreditoRegular" /></td>
-    <td><input type="text" class="format_number" name="txt_res_ventaCreditoMalo" value="" placeholder="0.00" id="txt_res_ventaCreditoMalo" /></td>
-    <td colspan="2" align="right"><input type="text" class="format_number" value="" placeholder="0.00" name="txt_res_sumaVentaCredito" id="txt_res_sumaVentaCredito" readonly="readonly" /></td>
-    <td align="right"><input type="text" class="format_number" value="" placeholder="0.00" name="txt_res_sumaVentaCredito_anual" id="txt_res_sumaVentaCredito_anual" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>19. Costo de Ventas</td>
-    <td>
-	<select name="slt_res_costoVentas" id="slt_res_costoVentas">
-<option value="">(Seleccione)</option>
-<optgroup label="AGRICULTURA">
-<option value="1" data-value="50">VIVEROS Y PLANTAS   50%</option>
-<option value="2" data-value="40">PRODUCCION DE CAFE     40%</option>
-<option value="3" data-value="75">PRODUCCION DE MAIZ      75%</option>
-<option value="4" data-value="68">PRODUCCION DE FRIJOL     68%</option>
-<option value="5" data-value="65">PRODUCCION DE PAPA      65%</option>
-<option value="6" data-value="70">PRODUCCION DE REPOLLO     70%</option>
-<option value="7" data-value="75">PRODUCCION DE CEBOLLA     75%</option>
-<option value="8" data-value="76">PRODUCCION DE TOMATE      76%</option>
-<option value="9" data-value="62">PRODUCCION DE CHILE DULCE      62%</option>
-<option value="10" data-value="50">PRODUCCION DE BROCOLI     50%</option>
-<option value="11" data-value="50">PRODUCCION DE PLATANO      50%</option>
-<option value="12" data-value="50">PRODUCCION DE TABACO     50%</option>
-<option value="13" data-value="50">PRODUCCION DE LECHUGA     50%</option>
-<option value="14" data-value="50">PRODUCCION DE FRUTAS     50%</option>
-</optgroup>
-<optgroup label="COMERCIO">
-<option value="15" data-value="70">ABARROTERIA     70%</option>
-<option value="16" data-value="50">ACHINERIAS    50%</option>
-<option value="17" data-value="50">ARTESANIAS      50%</option>
-<option value="18" data-value="70">CARNES Y EMBUTIDOS     70%</option>
-<option value="19" data-value="65">CHICLERA   65%</option>
-<option value="20" data-value="60">COMERCIALIZADORAS DE CAFÉ   60%</option>
-<option value="21" data-value="75">COMPRA / VENTA DE GRANOS. B  75%</option>
-<option value="22" data-value="65">COMPRA VENTA DE LACTEOS     65%</option>
-<option value="23" data-value="70">COMPRA Y VENTA DE GANADO     70%</option>
-<option value="24" data-value="80">DESTACE      80%</option>
-<option value="25" data-value="60">FARMACIA     60%</option>
-<option value="26" data-value="60">FERRETERIA     60%</option>
-<option value="27" data-value="65">FERTILIZANTES E INSUMOS     65%</option>
-<option value="28" data-value="50">FUNERARIAS    50%</option>
-<option value="29" data-value="70">PRODUCTOS AVICOLA     70%</option>
-<option value="30" data-value="70">PULPERIAS     70%</option>
-<option value="31" data-value="60">REPUESTOS AUTOMOTRICES   60%</option>
-<option value="32" data-value="60">VARIEDADES     60%</option>
-<option value="33" data-value="60">VENDEDOR AMBULANTE     60%</option>
-<option value="34" data-value="60">VENTA  DE CALZADO NUEVO     60%</option>
-<option value="35" data-value="60">VENTA / ARTICULOS DE CUERO     60%</option>
-<option value="36" data-value="60">VENTA / ELECTRODOMESTICOS  60%</option>
-<option value="37" data-value="70">VENTA / MATERIAL. DE CONSTRU  70%</option>
-<option value="38" data-value="60">VENTA / PRODUC. / AUDIO Y VIDEO.60%</option>
-<option value="39" data-value="60">VENTA / REPUESTOS DE BICICLET   60%</option>
-<option value="40" data-value="60">VENTA /CELULARES Y UTENSILIOS  60%</option>
-<option value="41" data-value="40">VENTA DE CALZADO USADO   40%</option>
-<option value="42" data-value="50">VENTA DE CONDIMENTOS     50%</option>
-<option value="43" data-value="50">VENTA DE COSMETICOS  50%</option>
-<option value="44" data-value="70">VENTA DE FRUTAS Y VERDURAS     70%</option>
-<option value="45" data-value="80">VENTA DE GAS LPG   80%</option>
-<option value="46" data-value="50">VENTA DE LENA    50%</option>
-<option value="47" data-value="60">VENTA DE MARISCOS   60%</option>
-<option value="48" data-value="60">VENTA DE ROPA NUEVA   60%</option>
-<option value="49" data-value="30">VENTA DE ROPA USADA    30%</option>
-<option value="50" data-value="60">VENTA DE UTENCILIOS PLASTICOS   60%</option>
-<option value="51" data-value="70">VENTA DE UTENCILIOS PLASTICOS   70%</option>
-<option value="52" data-value="65">VENTA DE UTILES DE OFICINA    65%</option>
-<option value="53" data-value="60">VENTA MEDICINA NATURAL   60%</option>
-<option value="54" data-value="60">VENTA POR ENCARGO    60%</option>
-<option value="55" data-value="60">VENTAS /ENCARGO / VENTA AMBUL  60%</option>
-</optgroup>
-<optgroup label="INDUSTRIA ">
-<option value="56" data-value="60">ALFARERIA    60%</option>
-<option value="57" data-value="50">ARTESANIAS      50%</option>
-<option value="58" data-value="60">CALERAS    60%</option>
-<option value="59" data-value="60">CAMARONERAS    60%</option>
-<option value="60" data-value="60">CARPINTERIA    60%</option>
-<option value="61" data-value="60">CRIA DE PECES   60%</option>
-<option value="62" data-value="70">CURTIEMBRE   70%</option>
-<option value="63" data-value="60">DULCERIA   60%</option>
-<option value="64" data-value="40">ELABORACION DE ALIMENTOS    40%</option>
-<option value="65" data-value="60">EMBUTIDOS    60%</option>
-<option value="66" data-value="60">FABRICACION DE CALZADO   60%</option>
-<option value="67" data-value="60">HERRERIA     60%</option>
-<option value="68" data-value="60">INDUSTRIA DE JUNCO Y CANAMO   60%</option>
-<option value="69" data-value="50">JOYERIA    50%</option>
-<option value="70" data-value="55">PANADERIA Y REPOSTERIA   55%</option>
-<option value="71" data-value="70">PROCESAMIENTO LACTEOS    70%</option>
-<option value="72" data-value="60">PROD DE MATERIAL DE CONSTRUC  60%</option>
-<option value="73" data-value="60">SALINERAS   60%</option>
-<option value="74" data-value="60">SASTRERIA   60%</option>
-<option value="75" data-value="70">SERIGRAFIAS    70%</option>
-<option value="76" data-value="60">TALABARTERIA   60%</option>
-<option value="77" data-value="50">TALLER DE COSTURA  50%</option>
-<option value="78" data-value="60">TALLER DE METALURGIA   60%</option>
-<option value="79" data-value="60">TAPICERIA    60%</option>
-<option value="80" data-value="35">TEJERA    35%</option>
-<option value="81" data-value="65">TORREFACTORAS     65%</option>
-<option value="82" data-value="40">TORTILLERIA    40%</option>
-<option value="83" data-value="50">VIVEROS Y PLANTAS   50%</option>
-</optgroup>
-<optgroup label="SERVICIO">
-<option value="84" data-value="50">ALQUILER DE VIDEO JUEGOS    50%</option>
-<option value="85" data-value="30">ALQUILERES DE PROPIEDADES    30%</option>
-<option value="86" data-value="50">CAFETERIA    50%</option>
-<option value="87" data-value="70">CENTRO DEPORTIVOS    70%</option>
-<option value="88" data-value="70">CENTROS TURISTICOS    70%</option>
-<option value="89" data-value="50">CIBER    50%</option>
-<option value="90" data-value="50">COMEDOR     50%</option>
-<option value="91" data-value="50">ENCOMIENDAS    50%</option>
-<option value="92" data-value="30">ENDEREZADO Y PINTURA    30%</option>
-<option value="93" data-value="50">ESTACIONES RADIALES   50%</option>
-<option value="94" data-value="65">ESTUDIOS FOTOGRAFICOS   65%</option>
-<option value="95" data-value="75">GASOLINERAS   75%</option>
-<option value="96" data-value="50">GIMNASIO Y MASAJES    50%</option>
-<option value="97" data-value="60">GOLOSINAS    60%</option>
-<option value="98" data-value="50">GRANEROS     50%</option>
-<option value="99" data-value="20">LLANTERA    20%</option>
-<option value="100" data-value="50">LUBRICENTROS  50%</option>
-<option value="101" data-value="50">MANT. Y REP. EQUIP. DE COMPUTO 50%</option>
-<option value="102" data-value="50">MOLINOS   50%</option>
-<option value="103" data-value="50">MOTOTAXIS  50%</option>
-<option value="104" data-value="50">RESTAURANTE    50%</option>
-<option value="105" data-value="30">SALON DE BELLEZA O BARBERIA    30%</option>
-<option value="106" data-value="50">SERVICIOS FUNERARIOS   50%</option>
-<option value="107" data-value="50">SERVICIOS MEDICOS    50%</option>
-<option value="108" data-value="50">SERVICIOS SECRETARIALES Y FOTOC  50%</option>
-<option value="109" data-value="50">TALLER DE FRICCIONES Y FRENOS 50%</option>
-<option value="110" data-value="30">TALLER DE MECANICA    30%</option>
-<option value="111" data-value="30">TALLER DE RADIO ELECTRONICA   30%</option>
-<option value="112" data-value="70">TAXISTA    70%</option>
-<option value="113" data-value="60">TRANSPORTE /CARGA DE CAMION   60%</option>
-<option value="114" data-value="60">TRANSPORTE DE PERSONAL    60%</option>
-<option value="115" data-value="70">TRANSPORTE URB. DE PASAJEROS  70%</option>
-</optgroup>
-<optgroup label="OTROS">
-<option value="116" data-value="0">VIVIENDA PRODUCTIVA   0%</option>
-<option value="117" data-value="0">CONSUMO      0%</option>
-</optgroup>
-</select>
-	</td>
-    <td>Valor</td>
-    <td><input name="txt_res_costoVenta" type="text" class="format_number" placeholder="0.00" id="txt_res_costoVenta"  value="" readonly="readonly" /></td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_sumaCostoVenta" value="" id="txt_res_sumaCostoVenta" readonly="readonly" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_sumaCostoVenta_anual" value="" id="txt_res_sumaCostoVenta_anual" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><strong>20. Utilidad Bruta</strong></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_utilidad" id="txt_res_utilidad" value="" style="font-weight:bold;" readonly="readonly" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_utilidad_anual" id="txt_res_utilidad_anual" value="" style="font-weight:bold;" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><strong>21. Gastos Fijos</strong></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_sumaGastos" id="txt_res_sumaGastos" value="" style="font-weight:bold;" readonly="readonly" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_sumaGastos_anual" id="txt_res_sumaGastos_anual" value="" style="font-weight:bold;" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">22. Sueldos y Salarios</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_salarios" id="txt_res_salarios" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_salarios_anual" id="txt_res_salarios_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">23. Alquiler de Vivienda</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_alquiler" id="txt_res_alquiler" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_alquiler_anual" id="txt_res_alquiler_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">24. Servicios Publicos</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_serviciosPublicos" id="txt_res_serviciosPublicos" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_serviciosPublicos_anual" id="txt_res_serviciosPublicos_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">25. Alimentación</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_alimentacion" id="txt_res_alimentacion" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_alimentacion_anual" id="txt_res_alimentacion_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">26. Educación y Salud</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_educasalud" id="txt_res_educasalud" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_educasalud_anual" id="txt_res_educasalud_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">27. Transporte y Otros</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_transotros" id="txt_res_transotros" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_transotros_anual" id="txt_res_transotros_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">28. Otros</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_otros" id="txt_res_otros" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_otros_anual" id="txt_res_otros_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><strong>29. Utilidad Neta</strong></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_utilidadNeta" style="font-weight:bold;" value="" id="txt_res_utilidadNeta" /></td>
-    <td align="right"><input type="text" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_utilidadNeta_anual" style="font-weight:bold;" value="" id="txt_res_utilidadNeta_anual" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">30.    Pago de Intereses de obligaciones actuales del negocio</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_pagoints" value="" id="txt_res_pagoints" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_pagoints_anual" id="txt_res_pagoints_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><strong>31.    Disponiblidad Real del Negocio</strong></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_disponibilidad" value="" style="font-weight:bold;" id="txt_res_disponibilidad" /></td>
-    <td align="right"><input type="text" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_disponibilidad_anual" style="font-weight:bold;" value="" id="txt_res_disponibilidad_anual" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">32. Otro Ingresos</td>
-    <td colspan="2"><input type="text" placeholder="Especifique el ingreso" name="txt_res_detalleotrosIngresos" value="" id="txt_res_detalleotrosIngresos" /></td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_otrosIngresos" value="" id="txt_res_otrosIngresos" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_otrosIngresos_anual" id="txt_res_otrosIngresos_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">33.    Otros Ingresos Familiares</td>
-    <td colspan="2"><input type="text" placeholder="Especifique el ingreso Familiar" name="txt_res_detalleotrosIngresosFam" value="" id="txt_res_detalleotrosIngresosFam" /></td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_otrosIngresosFam" id="txt_res_otrosIngresosFam" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_otrosIngresosFam_anual" id="txt_res_otrosIngresosFam_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2">34.    Gastos familiares con otros recursos</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_gastoFamiliar" id="txt_res_gastoFamiliar" value="" /></td>
-    <td align="right"><input type="text" class="format_number" placeholder="0.00" name="txt_res_gastoFamiliar_anual" id="txt_res_gastoFamiliar_anual" value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><strong>35.    Disponiblidad Real del Cliente</strong></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td colspan="2" align="right"><input name="txt_res_disponibilidadCliente" class="format_number" data-v-min="-999999999.99" placeholder="0.00" type="text" style="font-weight:bold;" id="txt_res_disponibilidadCliente" value="" readonly="readonly" /></td>
-    <td align="right"><input name="txt_res_disponibilidadCliente_anual" class="format_number" data-v-min="-999999999.99" placeholder="0.00" type="text" style="font-weight:bold;" id="txt_res_disponibilidadCliente_anual" value="" readonly="readonly" /></td>
-  </tr>
-</table>
-</div>
-
-<div data-role="collapsible" data-collapsed="false">
-					<h4>Analisis de Cuota</h4>
-<table cellspacing="0" cellpadding="0"  border="1"  style="width: 100%; background-color:#cfcfcf;">
-  <tr>
-    <td>38. Monto de Prestamo Solicitado</td>
-    <td align="right"><input name="txt_cuo_montoSolicitado" class="format_number" type="text" id="txt_cuo_montoSolicitado" placeholder=""  value="" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>38.    Monto de Prestamo Recomendado</td>
-    <td align="right"><input type="text" name="txt_cuo_montoRecomendado" class="format_number" id="txt_cuo_montoRecomendado" placeholder="0.00" value="" /></td>
-    </tr>
-  <tr>
-    <td>39.    Plazo recomendado (meses)</td>
-    <td align="right"><input name="txt_cuo_plazo" type="text" id="txt_cuo_plazo" readonly="readonly"  value="" placeholder="0.00" /></td>
-  </tr>
-  <tr>
-    <td>40.    Frecuencia de pago (numero coutas)</td>
-    <td align="right"><input name="txt_cuo_frecuencia" type="text" id="txt_cuo_frecuencia"  value="" placeholder="0.00" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>41. Tasa de Interes</td>
-    <td align="right"><input name="txt_cuo_interes" type="text" class="format_number" id="txt_cuo_interes"  value="" placeholder="0.00%" readonly="readonly" /></td>
-  </tr>
-  <tr>
-    <td>42.    Couta Recomendada</td>
-    <td align="right"><input name="txt_cuo_cuotaRecomendada" class="format_number" type="text" id="txt_cuo_cuotaRecomendada" placeholder="0.00"  value="" readonly="readonly" /></td>
-  </tr>
-</table>
-</div>
-
-<div data-role="collapsible" data-collapsed="true">
-					<h4>Indicadores Financieros</h4>
-					<table style="width: 100%; background-color:#cfcfcf;">
-					<tbody><tr>
-					  <td colspan="3">Politica</td>
-					  <td>&nbsp;</td>
-					 </tr>
-					 						<tr>
-							<td>43. Rentabilidad</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond43" id="txt_efin_ind_cond43" value=">=">
-							<input type="hidden" name="txt_efin_ind_val43" id="txt_efin_ind_val43" value="25">
-							&gt;= 25%</td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind43" id="txt_efind_ind43" value="" readonly="readonly" style="background-color: red;"></div></td>
-						</tr>
-					 						<tr>
-							<td>44. Liquidez</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond44" id="txt_efin_ind_cond44" value=">=">
-							<input type="hidden" name="txt_efin_ind_val44" id="txt_efin_ind_val44" value="2">
-							&gt;= 2</td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind44" id="txt_efind_ind44" value="" readonly="readonly" style="background-color: red;"></div></td>
-						</tr>
-					 						<tr>
-							<td>45. Razon Acida</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond45" id="txt_efin_ind_cond45" value=">=">
-							<input type="hidden" name="txt_efin_ind_val45" id="txt_efin_ind_val45" value="1">
-							&gt;= 1</td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind45" id="txt_efind_ind45" value="" readonly="readonly" style="background-color: red;"></div></td>
-						</tr>
-					 						<tr>
-							<td>46. Endeudamiento</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond46" id="txt_efin_ind_cond46" value="<=">
-							<input type="hidden" name="txt_efin_ind_val46" id="txt_efin_ind_val46" value="50">
-							&lt;= 50%</td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind46" id="txt_efind_ind46" value="" readonly="readonly" style="background-color: red;"></div></td>
-						</tr>
-					 						<tr>
-							<td>47. Capital de Trabajo</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond47" id="txt_efin_ind_cond47" value="">
-							<input type="hidden" name="txt_efin_ind_val47" id="txt_efin_ind_val47" value="">
-							 </td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind47" class="format_number" data-v-min="-999999999.99" id="txt_efind_ind47" value="" readonly="readonly"></div></td>
-						</tr>
-					 						<tr>
-							<td>48. Capac/pago del Negocio</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond48" id="txt_efin_ind_cond48" value=">=">
-							<input type="hidden" name="txt_efin_ind_val48" id="txt_efin_ind_val48" value="2">
-							&gt;= 2</td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind48" id="txt_efind_ind48" value="" readonly="readonly" style="background-color: red;"></div></td>
-						</tr>
-					 						<tr>
-							<td>49. Capac/pago del Cliente</td>
-							<td></td>
-							<td>
-							<input type="hidden" name="txt_efin_ind_cond49" id="txt_efin_ind_cond49" value=">=">
-							<input type="hidden" name="txt_efin_ind_val49" id="txt_efin_ind_val49" value="2">
-							&gt;= 2</td>
-							<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind49" id="txt_efind_ind49" value="" readonly="readonly" style="background-color: red;"></div></td>
-						</tr>
-					 					 </tbody></table>
-					</div>
-<div data-role="collapsible" data-collapsed="true">
-					<h4>Evaluación del Crecimiento del Negocio</h4>
-
-
-<table cellspacing="0" cellpadding="0" border="1"  style="width: 100%; background-color:#cfcfcf;">
-  <tr>
-    <td><strong>PARAMETROS</strong></td>
-    <td colspan="2" ><strong>PTMO ACTUAL</strong></td>
-    <td><strong>PTMO ANTERIOR</strong></td>
-    <td><strong>VARIACION</strong></td>
-    <td colspan="2"><strong>%</strong></td>
-  </tr>
-  <tr>
-    <td> Activos</td>
-    <td colspan="2"><span id="t_activos" class="format_number"></span></td>
-    <td><span id="a_activos"><input type="text" class="format_number" name="txt_crec_activos_pasado" id="txt_crec_activos_pasado" value="" placeholder="0.00" /></span></td>
-    <td><span id="v_activos" class="format_number" data-v-min="-999999999.99"></span></td>
-    <td colspan="2"><span id="p_activos"></span></td>
-  </tr>
-  <tr>
-    <td> Pasivo</td>
-    <td colspan="2"><span id="t_pasivos" class="format_number"></span></td>
-    <td><span id="a_pasivos"><input type="text" class="format_number" name="txt_crec_pasivos_pasado" id="txt_crec_pasivos_pasado" value="" placeholder="0.00" /></span></td>
-    <td><span id="v_pasivos" class="format_number" data-v-min="-999999999.99"></span></td>
-    <td colspan="2"><span id="p_pasivos"></span></td>
-  </tr>
-  <tr>
-    <td>Capital</td>
-    <td colspan="2"><span id="t_capital" class="format_number"></span></td>
-    <td><span id="a_capital"><input type="text" class="format_number" name="txt_crec_capital_pasado" id="txt_crec_capital_pasado" value="" placeholder="0.00" /></span></td>
-    <td><span id="v_capital" class="format_number" data-v-min="-999999999.99"></span></td>
-    <td colspan="2"><span id="p_capital"></span></td>
-  </tr>
-  <tr>
-    <td>Inventarios</td>
-    <td colspan="2"><span id="t_inventario" class="format_number"></span></td>
-    <td><span id="a_inventario"><input type="text" class="format_number" name="txt_crec_inventarios_pasado" id="txt_crec_inventarios_pasado" value="" placeholder="0.00" /></span></td>
-    <td><span id="v_inventario" class="format_number" data-v-min="-999999999.99"></span></td>
-    <td colspan="2"><span id="p_inventario"></span></td>
-  </tr>
-  <tr>
-    <td> Utilidad</td>
-    <td colspan="2"><span id="t_utilidad" class="format_number" data-v-min="-999999999.99"></span></td>
-    <td><span id="a_utilidad"><input type="text" class="format_number" name="txt_crec_utilidad_pasado" id="txt_crec_utilidad_pasado" value="" placeholder="0.00" /></span></td>
-    <td><span id="v_utilidad" class="format_number" data-v-min="-999999999.99"></span></td>
-    <td colspan="2"><span id="p_utilidad"></span></td>
-  </tr>
-</table>
-</div>
-<div style="width:95%;margin:0 auto;">
-Observaciones:<br />
-		<textarea name="txt_est_observacion" id="txt_est_observacion" cols="100" rows="8"></textarea>
-		<br />
-		<a id="btnFlujo" href="#dlgFlujoCaja" data-rel="popup" data-transition="fade" data-position-to="window" data-role="button" data-theme="b">Ver Flujo de Caja</a>
-		<br />
-		<div data-role="popup" id="dlgFlujoCaja" data-overlay-theme="a" data-theme="a" style="max-width:980px;" class="ui-corner-all">
-			<div data-role="header" data-theme="a" class="ui-corner-top">
-				<h1>Flujo de Caja</h1>
-			</div>
-			<div role="main" class="ui-corner-bottom ui-content">
-				<div id="frmFlujo"></div>
-				<a href="#" data-role="button" data-rel="back" data-theme="a">Cerrar</a>
-			</div>
-		</div>
-		</div>
-			</div>		
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('creditos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_evalFinanciera');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
 			</div>
 		</div>
 		<!-- PAGE prendaria-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_prendaria">
 			<div class="interna">
 				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Garantia Prendaria</div>
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Garantía Prendaria</div>
 				</div>
-			<div role="main" class="cuerpo-interna" id="div_prendaria"></div><!-- cuerpo-interna -->
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('creditos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_prendaria');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
+				<input type="hidden" name="credId_gtia_pren" id="credId_gtia_pren" value="0" />
+				<div role="main" class="cuerpo-interna" id="div_prendaria"></div><!-- cuerpo-interna -->
 			</div>
-		</div>		
-	<!-- PAGE productos-->
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_prendaria');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE evalFinanciera-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_evalFinanciera">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+				<div class="head-clientes">
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Evaluaci&oacute;n Financiera</div>
+				</div>
+			<input type="hidden" name="credId_eval_fin" id="credId_eval_fin" value="0" />				
+			<div role="main" class="cuerpo-interna" id="div_evalFinanciera">
+				<form name="evalfin-form" id="evalfin-form" >
+				<div data-role="collapsible" data-collapsed="false">
+						<h4>Datos</h4>
+						<table style="width: 100%; background-color:#cfcfcf;">
+							<tr>
+								<td width="33%">
+									<label for="txt_fidu_noIdentidad">1. Número de Identidad:</label>
+									<input type="text" name="txt_evalfin_noIdentidad" id="txt_evalfin_noIdentidad" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
+								</td>
+								<td width="33%">
+									<label for="txt_fidu_nombre">2. Nombre:</label>
+									<input type="text" name="txt_evalfin_nombre" id="txt_evalfin_nombre" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
+								</td>
+								<td width="33%">
+									<label for="txt_fidu_codCliente">3. Código del Cliente:</label>
+									<input type="text" name="txt_evalfin_codCliente" id="txt_evalfin_codCliente" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
+								</td>	    					
+							</tr>
+						</table>
+					</div>
+				<div data-role="collapsible" data-collapsed="false">
+						<h4>Balance General (Valores en Lempiras)</h4>
+	<table  style="width: 100%; background-color:#cfcfcf;" border="1" cellspacing="0" cellpadding="0" summary="Balance General">
+	  <tr>
+		<td>4. Caja y Bancos:</td>
+		<td>&nbsp;</td>
+		<td align="right">
+		  <input type="number" class="format_number" name="txt_bal_cajasyBancos" value="" placeholder="0.00" id="txt_bal_cajasyBancos" />
+		</td>
+	  </tr>
+	  <tr>
+		<td>5. Cuentas por Cobrar</td>
+		<td>&nbsp;</td>
+		<td align="right"><input type="number" class="format_number" name="txt_bal_cuentasxCobrar" value="" placeholder="0.00" id="txt_bal_cuentasxCobrar" /></td>
+	  </tr>
+	  <tr>
+		<td>6. Inventarios (mercadería, Materia Prima, Proceso, Terminado)</td>
+		<td>&nbsp;</td>
+		<td align="right"><input type="number" class="format_number" name="txt_bal_inventario" value="" placeholder="0.00" id="txt_bal_inventario" /></td>
+	  </tr>
+	  <tr>
+		<td>7. Inversiones producción agropecuaria</td>
+		<td>&nbsp;</td>
+		<td align="right"><input type="number" class="format_number" name="txt_bal_invagro" value="" placeholder="0.00" id="txt_bal_invagro" /></td>
+	  </tr>
+	  <tr>
+		<td>&nbsp;</td>
+		<td align="center"><strong>8. Total Activo Circulante</strong></td>
+		<td align="right"><input name="txt_bal_activoCirculante" class="format_number" value="" placeholder="0.00" type="number" id="txt_bal_activoCirculante" readonly="readonly" style="font-weight:bold;" /></td>
+	  </tr>
+	  <tr>
+		<td><strong>9. Activo Fijo (Patrimonio)</strong></td>
+		<td>&nbsp;</td>
+		<td align="right"><input name="txt_bal_patrimonio" class="format_number" type="number" placeholder="0.00" id="txt_bal_patrimonio" value="" readonly="readonly" style="font-weight:bold;"  /></td>
+	  </tr>
+	  <tr>
+		<td>&nbsp;</td>
+		<td align="center"><strong>10. Total Activos</strong></td>
+		<td align="right"><input name="txt_bal_activos" class="format_number" type="number" placeholder="0.00" id="txt_bal_activos" value="" style="font-weight:bold;" readonly="readonly" /></td>
+	  </tr>
+	  <tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td align="right">&nbsp;</td>
+	  </tr>
+	  <tr>
+		<td>11. Cuentas por Pagar</td>
+		<td>&nbsp;</td>
+		<td align="right"><input type="number" name="txt_bal_cuentasxPagar" class="format_number" value="" placeholder="0.00" id="txt_bal_cuentasxPagar" /></td>
+	  </tr>
+	  <tr>
+		<td>12. Proveedores</td>
+		<td>&nbsp;</td>
+		<td align="right"><input type="number" name="txt_bal_proveedores" class="format_number" value="" placeholder="0.00" id="txt_bal_proveedores" /></td>
+	  </tr>
+	  <tr>
+		<td>&nbsp;</td>
+		<td align="center"><strong>13. Total Pasivo</strong></td>
+		<td align="right"><input name="txt_bal_pasivos" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_pasivos" style="font-weight:bold;" readonly="readonly" /></td>
+	  </tr>
+	  <tr>
+		<td>14. Capital</td>
+		<td>&nbsp;</td>
+		<td align="right"><input name="txt_bal_capital" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_capital"  style="font-weight:bold;" readonly="readonly" /></td>
+	  </tr>
+	  <tr>
+		<td><strong>15. Total Pasivo + Capital</strong></td>
+		<td>&nbsp;</td>
+		<td align="right"><input name="txt_bal_total" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_total" style="font-weight:bold;" readonly="readonly" /></td>
+	  </tr>
+	  <tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td align="right">&nbsp;</td>
+	  </tr>
+	</table>
+
+	</div>
+				<div data-role="collapsible" data-collapsed="false">
+					  <h4>Estados de Resultados (Valores en Lempiras)</h4>
+				<table cellspacing="0" cellpadding="0" style="width: 100%; background-color:#cfcfcf;" border="1" >
+				  <tr>
+					<td rowspan="2"><strong>16. Ventas Netas al Mes</strong></td>
+					<td align="center" rowspan="2">Bueno</td>
+					<td align="center" rowspan="2">Regular</td>
+					<td align="center" rowspan="2">Malo</td>
+					<td colspan="2" align="center">Mensual</td>
+					<td align="center">Anual</td>
+				  </tr>
+				  <tr>
+					<td colspan="2" align="right"><input type="number" class="format_number" name="txt_res_sumaVenta" value="" placeholder="0.00"  style="font-weight:bold;" id="txt_res_sumaVenta" readonly="readonly" /></td>
+					<td align="right"><input type="number" class="format_number" name="txt_res_sumaVenta_anual" value="" placeholder="0.00"  style="font-weight:bold;" id="txt_res_sumaVenta_anual" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td>17. Ventas al Contado</td>
+					<td><input type="number" class="format_number" name="txt_res_ventaContadoBueno" value="" placeholder="0.00" id="txt_res_ventaContadoBueno" /></td>
+					<td><input type="number" class="format_number" name="txt_res_ventaContadoRegular" value="" placeholder="0.00" id="txt_res_ventaContadoRegular" /></td>
+					<td><input type="number" class="format_number" name="txt_res_ventaContadoMalo" value="" placeholder="0.00" id="txt_res_ventaContadoMalo" /></td>
+					<td colspan="2"><input name="txt_res_sumaVentaContado" class="format_number" value="" placeholder="0.00" type="number" id="txt_res_sumaVentaContado" readonly="readonly" /></td>
+					<td align="right"><input name="txt_res_sumaVentaContado_anual" class="format_number" value="" placeholder="0.00" type="number" id="txt_res_sumaVentaContado_anual" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td>18. Ventas al Credito</td>
+					<td><input type="number" class="format_number" name="txt_res_ventaCreditoBueno" value="" placeholder="0.00" id="txt_res_ventaCreditoBueno" /></td>
+					<td><input type="number" class="format_number" name="txt_res_ventaCreditoRegular" value="" placeholder="0.00" id="txt_res_ventaCreditoRegular" /></td>
+					<td><input type="number" class="format_number" name="txt_res_ventaCreditoMalo" value="" placeholder="0.00" id="txt_res_ventaCreditoMalo" /></td>
+					<td colspan="2" align="right"><input type="number" class="format_number" value="" placeholder="0.00" name="txt_res_sumaVentaCredito" id="txt_res_sumaVentaCredito" readonly="readonly" /></td>
+					<td align="right"><input type="number" class="format_number" value="" placeholder="0.00" name="txt_res_sumaVentaCredito_anual" id="txt_res_sumaVentaCredito_anual" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td>19. Costo de Ventas</td>
+					<td>
+					<select name="cb_res_costoVentas" id="cb_res_costoVentas" data-theme="b">
+				<option value="">(Seleccione)</option>
+				<optgroup label="AGRICULTURA">
+				<option value="1" data-value="50">VIVEROS Y PLANTAS   50%</option>
+				<option value="2" data-value="40">PRODUCCION DE CAFE     40%</option>
+				<option value="3" data-value="75">PRODUCCION DE MAIZ      75%</option>
+				<option value="4" data-value="68">PRODUCCION DE FRIJOL     68%</option>
+				<option value="5" data-value="65">PRODUCCION DE PAPA      65%</option>
+				<option value="6" data-value="70">PRODUCCION DE REPOLLO     70%</option>
+				<option value="7" data-value="75">PRODUCCION DE CEBOLLA     75%</option>
+				<option value="8" data-value="76">PRODUCCION DE TOMATE      76%</option>
+				<option value="9" data-value="62">PRODUCCION DE CHILE DULCE      62%</option>
+				<option value="10" data-value="50">PRODUCCION DE BROCOLI     50%</option>
+				<option value="11" data-value="50">PRODUCCION DE PLATANO      50%</option>
+				<option value="12" data-value="50">PRODUCCION DE TABACO     50%</option>
+				<option value="13" data-value="50">PRODUCCION DE LECHUGA     50%</option>
+				<option value="14" data-value="50">PRODUCCION DE FRUTAS     50%</option>
+				</optgroup>
+				<optgroup label="COMERCIO">
+				<option value="15" data-value="70">ABARROTERIA     70%</option>
+				<option value="16" data-value="50">ACHINERIAS    50%</option>
+				<option value="17" data-value="50">ARTESANIAS      50%</option>
+				<option value="18" data-value="70">CARNES Y EMBUTIDOS     70%</option>
+				<option value="19" data-value="65">CHICLERA   65%</option>
+				<option value="20" data-value="60">COMERCIALIZADORAS DE CAFÉ   60%</option>
+				<option value="21" data-value="75">COMPRA / VENTA DE GRANOS. B  75%</option>
+				<option value="22" data-value="65">COMPRA VENTA DE LACTEOS     65%</option>
+				<option value="23" data-value="70">COMPRA Y VENTA DE GANADO     70%</option>
+				<option value="24" data-value="80">DESTACE      80%</option>
+				<option value="25" data-value="60">FARMACIA     60%</option>
+				<option value="26" data-value="60">FERRETERIA     60%</option>
+				<option value="27" data-value="65">FERTILIZANTES E INSUMOS     65%</option>
+				<option value="28" data-value="50">FUNERARIAS    50%</option>
+				<option value="29" data-value="70">PRODUCTOS AVICOLA     70%</option>
+				<option value="30" data-value="70">PULPERIAS     70%</option>
+				<option value="31" data-value="60">REPUESTOS AUTOMOTRICES   60%</option>
+				<option value="32" data-value="60">VARIEDADES     60%</option>
+				<option value="33" data-value="60">VENDEDOR AMBULANTE     60%</option>
+				<option value="34" data-value="60">VENTA  DE CALZADO NUEVO     60%</option>
+				<option value="35" data-value="60">VENTA / ARTICULOS DE CUERO     60%</option>
+				<option value="36" data-value="60">VENTA / ELECTRODOMESTICOS  60%</option>
+				<option value="37" data-value="70">VENTA / MATERIAL. DE CONSTRU  70%</option>
+				<option value="38" data-value="60">VENTA / PRODUC. / AUDIO Y VIDEO.60%</option>
+				<option value="39" data-value="60">VENTA / REPUESTOS DE BICICLET   60%</option>
+				<option value="40" data-value="60">VENTA /CELULARES Y UTENSILIOS  60%</option>
+				<option value="41" data-value="40">VENTA DE CALZADO USADO   40%</option>
+				<option value="42" data-value="50">VENTA DE CONDIMENTOS     50%</option>
+				<option value="43" data-value="50">VENTA DE COSMETICOS  50%</option>
+				<option value="44" data-value="70">VENTA DE FRUTAS Y VERDURAS     70%</option>
+				<option value="45" data-value="80">VENTA DE GAS LPG   80%</option>
+				<option value="46" data-value="50">VENTA DE LENA    50%</option>
+				<option value="47" data-value="60">VENTA DE MARISCOS   60%</option>
+				<option value="48" data-value="60">VENTA DE ROPA NUEVA   60%</option>
+				<option value="49" data-value="30">VENTA DE ROPA USADA    30%</option>
+				<option value="50" data-value="60">VENTA DE UTENCILIOS PLASTICOS   60%</option>
+				<option value="51" data-value="70">VENTA DE UTENCILIOS PLASTICOS   70%</option>
+				<option value="52" data-value="65">VENTA DE UTILES DE OFICINA    65%</option>
+				<option value="53" data-value="60">VENTA MEDICINA NATURAL   60%</option>
+				<option value="54" data-value="60">VENTA POR ENCARGO    60%</option>
+				<option value="55" data-value="60">VENTAS /ENCARGO / VENTA AMBUL  60%</option>
+				</optgroup>
+				<optgroup label="INDUSTRIA ">
+				<option value="56" data-value="60">ALFARERIA    60%</option>
+				<option value="57" data-value="50">ARTESANIAS      50%</option>
+				<option value="58" data-value="60">CALERAS    60%</option>
+				<option value="59" data-value="60">CAMARONERAS    60%</option>
+				<option value="60" data-value="60">CARPINTERIA    60%</option>
+				<option value="61" data-value="60">CRIA DE PECES   60%</option>
+				<option value="62" data-value="70">CURTIEMBRE   70%</option>
+				<option value="63" data-value="60">DULCERIA   60%</option>
+				<option value="64" data-value="40">ELABORACION DE ALIMENTOS    40%</option>
+				<option value="65" data-value="60">EMBUTIDOS    60%</option>
+				<option value="66" data-value="60">FABRICACION DE CALZADO   60%</option>
+				<option value="67" data-value="60">HERRERIA     60%</option>
+				<option value="68" data-value="60">INDUSTRIA DE JUNCO Y CANAMO   60%</option>
+				<option value="69" data-value="50">JOYERIA    50%</option>
+				<option value="70" data-value="55">PANADERIA Y REPOSTERIA   55%</option>
+				<option value="71" data-value="70">PROCESAMIENTO LACTEOS    70%</option>
+				<option value="72" data-value="60">PROD DE MATERIAL DE CONSTRUC  60%</option>
+				<option value="73" data-value="60">SALINERAS   60%</option>
+				<option value="74" data-value="60">SASTRERIA   60%</option>
+				<option value="75" data-value="70">SERIGRAFIAS    70%</option>
+				<option value="76" data-value="60">TALABARTERIA   60%</option>
+				<option value="77" data-value="50">TALLER DE COSTURA  50%</option>
+				<option value="78" data-value="60">TALLER DE METALURGIA   60%</option>
+				<option value="79" data-value="60">TAPICERIA    60%</option>
+				<option value="80" data-value="35">TEJERA    35%</option>
+				<option value="81" data-value="65">TORREFACTORAS     65%</option>
+				<option value="82" data-value="40">TORTILLERIA    40%</option>
+				<option value="83" data-value="50">VIVEROS Y PLANTAS   50%</option>
+				</optgroup>
+				<optgroup label="SERVICIO">
+				<option value="84" data-value="50">ALQUILER DE VIDEO JUEGOS    50%</option>
+				<option value="85" data-value="30">ALQUILERES DE PROPIEDADES    30%</option>
+				<option value="86" data-value="50">CAFETERIA    50%</option>
+				<option value="87" data-value="70">CENTRO DEPORTIVOS    70%</option>
+				<option value="88" data-value="70">CENTROS TURISTICOS    70%</option>
+				<option value="89" data-value="50">CIBER    50%</option>
+				<option value="90" data-value="50">COMEDOR     50%</option>
+				<option value="91" data-value="50">ENCOMIENDAS    50%</option>
+				<option value="92" data-value="30">ENDEREZADO Y PINTURA    30%</option>
+				<option value="93" data-value="50">ESTACIONES RADIALES   50%</option>
+				<option value="94" data-value="65">ESTUDIOS FOTOGRAFICOS   65%</option>
+				<option value="95" data-value="75">GASOLINERAS   75%</option>
+				<option value="96" data-value="50">GIMNASIO Y MASAJES    50%</option>
+				<option value="97" data-value="60">GOLOSINAS    60%</option>
+				<option value="98" data-value="50">GRANEROS     50%</option>
+				<option value="99" data-value="20">LLANTERA    20%</option>
+				<option value="100" data-value="50">LUBRICENTROS  50%</option>
+				<option value="101" data-value="50">MANT. Y REP. EQUIP. DE COMPUTO 50%</option>
+				<option value="102" data-value="50">MOLINOS   50%</option>
+				<option value="103" data-value="50">MOTOTAXIS  50%</option>
+				<option value="104" data-value="50">RESTAURANTE    50%</option>
+				<option value="105" data-value="30">SALON DE BELLEZA O BARBERIA    30%</option>
+				<option value="106" data-value="50">SERVICIOS FUNERARIOS   50%</option>
+				<option value="107" data-value="50">SERVICIOS MEDICOS    50%</option>
+				<option value="108" data-value="50">SERVICIOS SECRETARIALES Y FOTOC  50%</option>
+				<option value="109" data-value="50">TALLER DE FRICCIONES Y FRENOS 50%</option>
+				<option value="110" data-value="30">TALLER DE MECANICA    30%</option>
+				<option value="111" data-value="30">TALLER DE RADIO ELECTRONICA   30%</option>
+				<option value="112" data-value="70">TAXISTA    70%</option>
+				<option value="113" data-value="60">TRANSPORTE /CARGA DE CAMION   60%</option>
+				<option value="114" data-value="60">TRANSPORTE DE PERSONAL    60%</option>
+				<option value="115" data-value="70">TRANSPORTE URB. DE PASAJEROS  70%</option>
+				</optgroup>
+				<optgroup label="OTROS">
+				<option value="116" data-value="0">VIVIENDA PRODUCTIVA   0%</option>
+				<option value="117" data-value="0">CONSUMO      0%</option>
+				</optgroup>
+				</select>
+					</td>
+					<td align="center">Valor</td>
+					<td><input name="txt_res_costoVenta" type="number" class="format_number" placeholder="0.00" id="txt_res_costoVenta"  value="" readonly="readonly" /></td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_sumaCostoVenta" value="" id="txt_res_sumaCostoVenta" readonly="readonly" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_sumaCostoVenta_anual" value="" id="txt_res_sumaCostoVenta_anual" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2"><strong>20. Utilidad Bruta</strong></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_utilidad" id="txt_res_utilidad" value="" style="font-weight:bold;" readonly="readonly" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_utilidad_anual" id="txt_res_utilidad_anual" value="" style="font-weight:bold;" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2"><strong>21. Gastos Fijos</strong></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_sumaGastos" id="txt_res_sumaGastos" value="" style="font-weight:bold;" readonly="readonly" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_sumaGastos_anual" id="txt_res_sumaGastos_anual" value="" style="font-weight:bold;" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">22. Sueldos y Salarios</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_salarios" id="txt_res_salarios" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_salarios_anual" id="txt_res_salarios_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">23. Alquiler de Vivienda</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_alquiler" id="txt_res_alquiler" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_alquiler_anual" id="txt_res_alquiler_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">24. Servicios Públicos</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_serviciosPublicos" id="txt_res_serviciosPublicos" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_serviciosPublicos_anual" id="txt_res_serviciosPublicos_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">25. Alimentación</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_alimentacion" id="txt_res_alimentacion" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_alimentacion_anual" id="txt_res_alimentacion_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">26. Educación y Salud</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_educasalud" id="txt_res_educasalud" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_educasalud_anual" id="txt_res_educasalud_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">27. Transporte y Otros</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_transotros" id="txt_res_transotros" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_transotros_anual" id="txt_res_transotros_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">28. Otros</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_otros" id="txt_res_otros" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_otros_anual" id="txt_res_otros_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2"><strong>29. Utilidad Neta</strong></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_utilidadNeta" style="font-weight:bold;" value="" readonly="readonly"  id="txt_res_utilidadNeta" /></td>
+					<td align="right"><input type="number" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_utilidadNeta_anual" style="font-weight:bold;" value="" readonly="readonly" id="txt_res_utilidadNeta_anual" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">30.    Pago de Intereses de obligaciones actuales del negocio</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_pagoints" value="" id="txt_res_pagoints" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_pagoints_anual" id="txt_res_pagoints_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2"><strong>31.    Disponiblidad Real del Negocio</strong></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_disponibilidad" value="" style="font-weight:bold;" readonly="readonly" id="txt_res_disponibilidad" /></td>
+					<td align="right"><input type="number" class="format_number" data-v-min="-999999999.99" placeholder="0.00" name="txt_res_disponibilidad_anual" style="font-weight:bold;" value="" readonly="readonly" id="txt_res_disponibilidad_anual" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">32. Otro Ingresos</td>
+					<td colspan="2"><input type="text" placeholder="Especifique el ingreso" name="txt_res_detalleotrosIngresos" value="" id="txt_res_detalleotrosIngresos" /></td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_otrosIngresos" value="" id="txt_res_otrosIngresos" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_otrosIngresos_anual" id="txt_res_otrosIngresos_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">33.    Otros Ingresos Familiares</td>
+					<td colspan="2"><input type="text" placeholder="Especifique el ingreso Familiar" name="txt_res_detalleotrosIngresosFam" value="" id="txt_res_detalleotrosIngresosFam" /></td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_otrosIngresosFam" id="txt_res_otrosIngresosFam" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_otrosIngresosFam_anual" id="txt_res_otrosIngresosFam_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2">34.    Gastos familiares con otros recursos</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_gastoFamiliar" id="txt_res_gastoFamiliar" value="" /></td>
+					<td align="right"><input type="number" class="format_number" placeholder="0.00" name="txt_res_gastoFamiliar_anual" id="txt_res_gastoFamiliar_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td colspan="2"><strong>35.    Disponiblidad Real del Cliente</strong></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td colspan="2" align="right"><input name="txt_res_disponibilidadCliente" class="format_number" data-v-min="-999999999.99" placeholder="0.00" type="number" style="font-weight:bold;" id="txt_res_disponibilidadCliente" value="" readonly="readonly" /></td>
+					<td align="right"><input name="txt_res_disponibilidadCliente_anual" class="format_number" data-v-min="-999999999.99" placeholder="0.00" type="number" style="font-weight:bold;" id="txt_res_disponibilidadCliente_anual" value="" readonly="readonly" /></td>
+				  </tr>
+				</table>
+				</div>
+				<div data-role="collapsible" data-collapsed="false">
+									<h4>Análisis de Cuota</h4>
+				<table cellspacing="0" cellpadding="0"  border="1"  style="width: 100%; background-color:#cfcfcf;">
+				  <tr>
+					<td>38. Monto de Préstamo Solicitado en Lempiras</td>
+					<td align="right"><input name="txt_cuo_montoSolicitado" class="format_number" type="number" id="txt_cuo_montoSolicitado" placeholder=""  value="" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td>38. Monto de Préstamo Recomendado en Lempiras</td>
+					<td align="right"><input type="number" name="txt_cuo_montoRecomendado" class="format_number" id="txt_cuo_montoRecomendado" placeholder="0.00" value="" /></td>
+					</tr>
+				  <tr>
+					<td>39. Plazo Recomendado (Meses)</td>
+					<td align="right"><input name="txt_cuo_plazo" style="text-align:right;" type="text" id="txt_cuo_plazo" readonly="readonly"  value="" placeholder="0.00" /></td>
+				  </tr>
+				  <tr>
+					<td>40. Frecuencia de Pago (Número de Coutas)</td>
+					<td align="right"><input name="txt_cuo_frecuencia" style="text-align:right;" type="text" id="txt_cuo_frecuencia"  value="" placeholder="0.00" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td>41. Tasa de Interés (%)</td>
+					<td align="right"><input name="txt_cuo_interes" type="number" class="format_number" id="txt_cuo_interes"  value="" placeholder="0.00%" readonly="readonly" /></td>
+				  </tr>
+				  <tr>
+					<td>42. Cuota Recomendada en Lempiras</td>
+					<td align="right"><input name="txt_cuo_cuotaRecomendada" class="format_number" type="number" id="txt_cuo_cuotaRecomendada" placeholder="0.00"  value="" readonly="readonly" /></td>
+				  </tr>
+				</table>
+				</div>
+				<div data-role="collapsible" data-collapsed="true">
+									<h4>Indicadores Financieros</h4>
+									<table style="width: 100%; background-color:#cfcfcf;">
+									<tbody><tr>
+									  <td colspan="3">Politica</td>
+									  <td>&nbsp;</td>
+									 </tr>
+															<tr>
+											<td>43. Rentabilidad</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond43" id="txt_efin_ind_cond43" value=">=">
+											<input type="hidden" name="txt_efin_ind_val43" id="txt_efin_ind_val43" value="25">
+											&gt;= 25%</td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind43" id="txt_efind_ind43" value="" readonly="readonly" style="background-color: red;"></div></td>
+										</tr>
+															<tr>
+											<td>44. Liquidez</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond44" id="txt_efin_ind_cond44" value=">=">
+											<input type="hidden" name="txt_efin_ind_val44" id="txt_efin_ind_val44" value="2">
+											&gt;= 2</td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind44" id="txt_efind_ind44" value="" readonly="readonly" style="background-color: red;"></div></td>
+										</tr>
+															<tr>
+											<td>45. Razán Acida</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond45" id="txt_efin_ind_cond45" value=">=">
+											<input type="hidden" name="txt_efin_ind_val45" id="txt_efin_ind_val45" value="1">
+											&gt;= 1</td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind45" id="txt_efind_ind45" value="" readonly="readonly" style="background-color: red;"></div></td>
+										</tr>
+															<tr>
+											<td>46. Endeudamiento</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond46" id="txt_efin_ind_cond46" value="<=">
+											<input type="hidden" name="txt_efin_ind_val46" id="txt_efin_ind_val46" value="50">
+											&lt;= 50%</td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind46" id="txt_efind_ind46" value="" readonly="readonly" style="background-color: red;"></div></td>
+										</tr>
+															<tr>
+											<td>47. Capital de Trabajo en Lempiras</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond47" id="txt_efin_ind_cond47" value="">
+											<input type="hidden" name="txt_efin_ind_val47" id="txt_efin_ind_val47" value="">
+											 </td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="number" name="txt_efind_ind47" class="format_number" data-v-min="-999999999.99" id="txt_efind_ind47" value="" readonly="readonly"></div></td>
+										</tr>
+															<tr>
+											<td>48. Capacidad de Pago del Negocio</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond48" id="txt_efin_ind_cond48" value=">=">
+											<input type="hidden" name="txt_efin_ind_val48" id="txt_efin_ind_val48" value="2">
+											&gt;= 2</td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind48" id="txt_efind_ind48" value="" readonly="readonly" style="background-color: red;"></div></td>
+										</tr>
+															<tr>
+											<td>49. Capacidad de Pago del Cliente</td>
+											<td></td>
+											<td>
+											<input type="hidden" name="txt_efin_ind_cond49" id="txt_efin_ind_cond49" value=">=">
+											<input type="hidden" name="txt_efin_ind_val49" id="txt_efin_ind_val49" value="2">
+											&gt;= 2</td>
+											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind49" id="txt_efind_ind49" value="" readonly="readonly" style="background-color: red;"></div></td>
+										</tr>
+														 </tbody></table>
+									</div>
+				<div data-role="collapsible" data-collapsed="true">
+									<h4>Evaluación del Crecimiento del Negocio</h4>
+
+
+				<table cellspacing="0" cellpadding="0" border="1"  style="width: 100%; background-color:#cfcfcf;">
+				  <tr>
+					<td><strong>PARAMETROS</strong></td>
+					<td align="center" colspan="2" ><strong>PRÉSTAMO ACTUAL LPS.</strong></td>
+					<td align="center"><strong>PRÉSTAMO ANTERIOR LPS.</strong></td>
+					<td align="center"><strong>VARIACIÓN</strong></td>
+					<td align="center" colspan="2"><strong>%</strong></td>
+				  </tr>
+				  <tr>
+					<td> Activos</td>
+					<td align="right" colspan="2"><span id="t_activos" class="lbl_nformat"></span></td>
+					<td><span id="a_activos"><input type="number" class="format_number" name="txt_crec_activos_pasado" id="txt_crec_activos_pasado" value="" placeholder="0.00" /></span></td>
+					<td align="center"><span id="v_activos" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+					<td align="center" colspan="2"><span id="p_activos"></span></td>
+				  </tr>
+				  <tr>
+					<td> Pasivo</td>
+					<td align="right" colspan="2"><span id="t_pasivos" class="lbl_nformat"></span></td>
+					<td><span id="a_pasivos"><input type="number" class="format_number" name="txt_crec_pasivos_pasado" id="txt_crec_pasivos_pasado" value="" placeholder="0.00" /></span></td>
+					<td align="center"><span id="v_pasivos" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+					<td align="center" colspan="2"><span id="p_pasivos"></span></td>
+				  </tr>
+				  <tr>
+					<td> Capital</td>
+					<td align="right" colspan="2"><span id="t_capital" class="lbl_nformat"></span></td>
+					<td><span id="a_capital"><input type="number" class="format_number" name="txt_crec_capital_pasado" id="txt_crec_capital_pasado" value="" placeholder="0.00" /></span></td>
+					<td align="center"><span id="v_capital" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+					<td align="center" colspan="2"><span id="p_capital"></span></td>
+				  </tr>
+				  <tr>
+					<td> Inventarios</td>
+					<td align="right" colspan="2"><span id="t_inventario" class="lbl_nformat"></span></td>
+					<td><span id="a_inventario"><input type="number" class="format_number" name="txt_crec_inventarios_pasado" id="txt_crec_inventarios_pasado" value="" placeholder="0.00" /></span></td>
+					<td align="center"><span id="v_inventario" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+					<td align="center" colspan="2"><span id="p_inventario"></span></td>
+				  </tr>
+				  <tr>
+					<td> Utilidad</td>
+					<td align="right" colspan="2"><span id="t_utilidad" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+					<td><span id="a_utilidad"><input type="number" class="format_number" name="txt_crec_utilidad_pasado" id="txt_crec_utilidad_pasado" value="" placeholder="0.00" /></span></td>
+					<td align="center"><span id="v_utilidad" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+					<td align="center" colspan="2"><span id="p_utilidad"></span></td>
+				  </tr>
+				</table>
+				</div>
+				<div style="width:95%;margin:0 auto;">
+					Observaciones:<br />
+					<textarea name="txt_est_observacion" id="txt_est_observacion" cols="100" rows="8"></textarea>
+					<br />
+					<a id="btnFlujo" href="#dlgFlujoCaja" data-rel="popup" data-transition="fade" data-position-to="window" data-role="button" data-theme="b">Ver Flujo de Caja</a>
+					<br />
+					<div data-role="popup" id="dlgFlujoCaja" data-overlay-theme="a" data-theme="a" style="max-width:980px;" class="ui-corner-all">
+						<div data-role="header" data-theme="a" class="ui-corner-top">
+							<h1>Flujo de Caja</h1>
+						</div>
+						<div role="main" class="ui-corner-bottom ui-content">
+							<div id="frmFlujo"></div>
+							<a href="#" data-role="button" data-rel="back" data-theme="a">Cerrar</a>
+						</div>
+					</div>
+				</div>
+				</form>
+			</div>		
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<!-- <li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera');irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li> -->
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_evalFinanciera');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE resolucion-->		
+		<div data-role="page" data-theme="a" class="bg-interna2" id="pag_resolucion">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+				<div class="head-clientes">
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Resolución</div>
+				</div>
+				<input type="hidden" name="credId_resolucion" id="credId_resolucion" value="0" />
+				<div role="main" class="cuerpo-interna" id="div_resolucion">
+					<div data-role="collapsible" data-collapsed="false">
+						<h4>Datos</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<tr>
+								<td width="33%">
+									<label for="txt_reso_noIdentidad">1. Número de Identidad:</label>
+									<input type="text" name="txt_reso_noIdentidad" id="txt_reso_noIdentidad" placeholder="" value="" readonly="readonly" data-theme="a">
+								</td>
+								<td width="33%">
+									<label for="txt_reso_nombre">2. Nombre:</label>
+									<input type="text" name="txt_reso_nombre" id="txt_reso_nombre" placeholder="" value="" readonly="readonly" data-theme="a">
+								</td>
+								<td width="33%">
+									<label for="txt_reso_codCliente">3. Código del Cliente:</label>
+									<input type="text" name="txt_reso_codCliente" id="txt_reso_codCliente" placeholder="" value="" readonly="readonly" data-theme="a">
+								</td>	    					
+							</tr>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="true">
+						<h4>Antecedentes Crediticios</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<thead>
+								<tr>
+									<th>4.N de Prestamo</th>
+									<th>5. Monto en Lps</th>
+									<th>6.Plazo</th>
+									<th>7.Dias de Atraso</th>
+									<th>8. Categoria</th>
+									<th>9. Garantia</th>
+									<th>10. Ahorros</th>
+								</tr>
+							</thead>
+							<tbody id="tbl_reso_antecendetes">
+							</tbody>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="false">
+						<h4>Datos del Crédito</h4>
+						<table style="width: 100%;background-color:#cfcfcf;border-color:#fff;" border="1">
+						 <tr>
+							<td><strong>11. Agencia</strong></td>
+							<td><span id="lbl_agencia"></span></td>
+							<td><strong>12. Tipo de Préstamo</strong></td>
+							<td><span id="lbl_tprestamo"></span></td>
+							<td><strong>13. Código del Asesor</strong></td>
+							<td><span id="lbl_asesor"></span></td>
+						  </tr>
+						  <tr>
+							<td><strong>14. Número de Operación</strong></td>
+							<td><span id="lbl_noperacion"></span></td>
+							<td><strong>15. Tipo de Financiamiento</strong></td>
+							<td><span id="lbl_tfinan"></span></td>
+							<td height="20"><strong>16. Producto</strong></td>
+							<td><span id="lbl_producto"></span></td>
+						  </tr>
+						  <tr>
+							<td><strong>17. Monto Solicitado Lps.</strong></td>
+							<td><span id="lbl_credmonto"></span></td>
+							<td><strong>18. Plazo</strong></td>
+							<td><span id="lbl_credplazo"></span></td>
+							<td><strong>19. Frecuencia de Pago</strong></td>
+							<td><span id="lbl_credfrpago"></span></td>
+						  </tr>
+						  <tr>
+							<td><strong>20. Tasa de Interés (%)</strong></td>
+							<td><span id="lbl_credinteres"></span></td>
+							<td><strong>21. Forma de Pago</strong></td>
+							<td><span id="lbl_credtpago"></span></td>
+							<td><strong>22. Destino</strong></td>
+							<td><span id="lbl_creddest"></span></td>
+						  </tr>
+						  <tr>
+							<td><strong>23. Rubro</strong></td>
+							<td><span id="lbl_credrubro"></span></td>
+							<td><strong>24. Actividad Específica</strong></td>
+							<td colspan="3"><span id="lbl_credactividad"></span></td>
+						  </tr>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="true">
+						<h4>Datos del Comité</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<tr><td>
+							<table style="width: 100%;background-color:#cfcfcf;">
+							  <tr>
+								<td width="11%">25. Acta Número</td>
+								<td width="10%"><input type="text" name="txt_reso_acta" readonly="readonly" id="txt_reso_acta" value="" /></td>
+								<td style="padding-left:2%;width:13.5%;">26. Fecha de Comité</td>
+								<td width="12%"><input type="text" name="txt_reso_fcom" readonly="readonly" id="txt_reso_fcom" value="" /></td>
+								<td style="padding-left:2%;width:8.5%;">27. Fondo</td>
+								<td><input type="text" name="txt_reso_fondo" readonly="readonly" id="txt_reso_fondo" value="" /></td>
+								<td style="padding-left:1%;width:11.5%;">28. Tasa Aprobada</td>
+								<td width="10%"><input type="text" name="txt_reso_taprob" readonly="readonly" id="txt_reso_taprob" value="" /></td>
+								<td width="15%">&nbsp;</td>
+							  </tr>
+							</table>
+							<table style="width: 100%;background-color:#cfcfcf;">
+							  <tr>
+								<td width="11%">29. Plazo Aprobado</td>
+								<td width="10%"><input type="text" name="txt_reso_plaprob" readonly="readonly" id="txt_reso_plaprob" value="" /></td>
+								<td style="padding-left: 1%;width: 15%;">30. Monto Aprobado Lps.</td>
+								<td width="10%"><input type="text" name="txt_reso_maprob" readonly="readonly" id="txt_reso_maprob" value="" /></td>
+								<td style="padding-left: 1%;width: 17.5%;">31. Monto aprobado en Letras</td>
+								<td colspan="3"><input type="text" name="txt_reso_montoLetras" readonly="readonly" id="txt_reso_montoLetras" style="width:100%;" value="" /></td>
+							  </tr>
+							</table>
+							</td></tr>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="false">
+						<h4>Garantías</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<tr>
+								<td>
+									<table style="width: 100%;border:1px solid #fff;background-color:#cfcfcf;">
+										<thead>
+										<tr>
+											<td>
+												<table style="width: 100%">
+													 <tr>
+														<td colspan="3"><strong>32. Hipotecaria</strong></td>
+													 </tr>
+												</table>
+											</td>
+										</tr>
+										</thead>
+										<tbody id="tbl_res_gtia_hipo"></tbody>
+									</table>
+									<table style="width: 100%;border:1px solid #fff;background-color:#cfcfcf;">
+										<thead>
+										<tr>
+											<td>
+												<table style="width: 100%">
+													<tr>
+														<td colspan="3"><strong>33. Prendaria</strong></td>
+													  </tr>
+												</table>
+											</td>
+										</tr>
+										</thead>
+										<tbody id="tbl_res_gtia_pren"></tbody>
+									</table>
+									<table style="width: 100%;border:1px solid #fff;background-color:#cfcfcf;">
+										<thead>
+											<tr>
+												<td width="15%"><strong>34. Fiduciaria</strong></td>
+												<td width="70%"><strong>Nombre</strong></td>
+												<td colspan="2" style="text-align:center;"><strong>Total Activos</strong></td>
+											</tr> 
+										</thead>
+										<tbody id="tbl_res_gtia_fidu"></tbody>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="false">
+						<h4>Comentarios sobre la Capacidad de Pago</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<tr>
+								<td><textarea name="txt_reso_comentarios" id="txt_reso_comentarios" style="width:100%;height:120px;"></textarea></td>
+							</tr>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="false">
+						<h4>Comentarios sobre la necesidad de la Inversión</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<tr>
+								<td><textarea name="txt_reso_comentarios_inv" id="txt_reso_comentarios_inv" style="width:100%;height:120px;"></textarea></td>
+							</tr>
+						</table>
+					</div>
+					<div data-role="collapsible" data-collapsed="true">
+						<h4>Firmas</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							 <tr>
+								<td>
+									<table style="width: 100%">
+										<tr><td colspan="2">Comité de Credito Agencia</td></tr>
+										<tr><td><img src="" style="width:100px;height:20px;" onclick="capturePhoto(this);return false;" name="img_reso_ccage_asis" id="img_reso_ccage_asis" /><input type="hidden" name="img_reso_ccage_asis_hd" id="img_reso_ccage_asis_hd" value=""></td><td><img src="" style="width:100px;height:20px;" onclick="capturePhoto(this);return false;"  name="img_reso_ccage_comi" id="img_reso_ccage_comi" /><input type="hidden" name="img_reso_ccage_comi_hd" id="img_reso_ccage_comi_hd" value=""></td></tr>
+										<tr><td>Firma Revisado Asistente</td><td>Firmas Miembros del Comité</td></tr>
+										<tr><td colspan="2">Observaciones</td></tr>
+										<tr><td colspan="2">&nbsp;</td></tr>
+									</table>
+									<table style="width: 100%">
+										<tr><td colspan="2">Comité  Regional y/o Interno</td></tr>
+										<tr><td><img src="" style="width:100%;height:20px;" onclick="capturePhoto(this);return false;" name="img_reso_creg_comi" id="img_reso_creg_comi" /><input type="hidden" name="img_reso_creg_comi_hd" id="img_reso_creg_comi_hd" value=""></td></tr>
+										<tr><td>Firmas Miembros del Comité</td></tr>
+										<tr><td>Observaciones</td></tr>
+										<tr><td>&nbsp;</td></tr>
+									</table>
+									<table style="width: 100%">
+										<tr><td colspan="2">Comité de Credito Externo</td></tr>
+										<tr><td><img src="" style="width:100%;height:20px;" onclick="capturePhoto(this);return false;" name="img_reso_cext_comi" id="img_reso_cext_comi" /><input type="hidden" name="img_reso_cext_comi_hd" id="img_reso_cext_comi_hd" value=""></td></tr>
+										<tr><td>Firmas Miembros del Comité</td></tr>
+										<tr><td>Observaciones</td></tr>
+										<tr><td>&nbsp;</td></tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<!-- <li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion');irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li> -->
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_resolucion');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- PAGE ahorros-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_ahorros">
+			<div class="interna">
+					<div class="header">
+						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					</div>
+					<div class="head-clientes">
+						<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Apertura de Cuenta de Ahorro</div>
+					</div>
+				<div role="main" class="cuerpo-interna" id="div_ahorros"></div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros');irOpcion('productos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_ahorros');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE depositosPlazo-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_depositosPlazo">
+			<div class="interna">
+					<div class="header">
+						<div class="logo-home"><a href="#" onclick="ivar r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					</div>
+					<div class="head-clientes">
+						<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Apertura de Dep&oacute;sito a Plazo</div>
+					</div>
+				<div role="main" class="cuerpo-interna" id="div_depositosPlazo"></div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo');irOpcion('productos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_depositosPlazo');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE remesas-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_remesas">
+			<div class="interna">
+					<div class="header">
+						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					</div>
+					<div class="head-clientes">
+						<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Remesas</div>
+					</div>
+				<div role="main" class="cuerpo-interna" id="div_remesas"></div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas');irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_remesas');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- PAGE facturacion-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_facturacion">
+			<div class="interna">
+					<div class="header">
+						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+					</div>
+					<div class="head-clientes">
+						<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Comprobante de Ingreso</div>
+					</div>
+				<div role="main" class="cuerpo-interna" id="div_facturacion">
+					<div data-role="collapsible" data-collapsed="false">
+						<h4>Datos de la Transacción</h4>
+						<table style="width: 100%;background-color:#cfcfcf;">
+							<tr>
+								<td width="33%">
+									<label for="txt_fac_nombre">1. Número de Identidad:</label>
+									<input type="hidden" name="hd_fac_codCliente" id="hd_fac_codCliente" value="">
+									<input type="text" name="txt_fac_identidad" id="txt_fac_identidad" placeholder="" required="required" value="" readonly="readonly">
+								</td>
+								<td width="33%">
+									<label for="txt_fac_identidad">2. Nombres y Apellidos:</label>
+									<input type="text" name="txt_fac_nombre" id="txt_fac_nombre" placeholder="" value="" required="required" readonly="readonly">
+									
+								</td>
+								<td width="33%">
+									<label for="txt_fac_fecha">3. Fecha:</label>
+									<input type="text" style="text-align: center;" readonly="readonly" name="txt_fac_fecha" id="txt_fac_fecha" placeholder="" value="">
+									<label for="txt_fac_usuario">4. Nombre del Usuario:</label>
+									<input type="text" style="text-align: center;" readonly="readonly" name="txt_fac_usuario" id="txt_fac_usuario" placeholder="" value="" readonly="readonly">							
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="cb_fac_tipoTransaccion">5. Tipo de Transacci&oacute;n:</label>								
+									<select name="cb_fac_tipoTransaccion" id="cb_fac_tipoTransaccion" data-theme="b">
+										<option value="">(Seleccione)</option>
+										<option value="1">Pago de Préstamo</option>
+										<option value="2">Depósito de Ahorro</option>
+										<option value="3">Nota de Cobro</option>
+										<option value="4">Seguro sobre Déuda</option>
+										<option value="5">Avalúos</option>
+										<option value="6">Remesas</option>
+									</select>
+								</td>
+								<td>
+									<label for="txt_fac_tipoTrans">6. Número de Cuenta:</label>
+									<input type="text" name="txt_fac_tipoTrans" id="txt_fac_tipoTrans" placeholder="" value="" data-mini="true">
+								</td>
+								<td>
+									<label for="txt_fac_valor">7. Monto de la Transacción en Lempiras:</label>
+									<input type="number" class="format_number" name="txt_fac_valor" id="txt_fac_valor" placeholder="0.00" value="" data-mini="true">
+									<input type="hidden" id='hd_seq' value="1"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div>
+										<label for="img_factura">8. Captura del Recibo:</label>
+										<img src="" onclick="capturePhoto(this);return false;" name="img_factura" id="img_factura" style="width: 200px;height: 100px;border: 1px solid #fff;margin-left:94px">
+										<input type="hidden" id="img_factura_hd" value=""/>
+									</div>
+									<br />
+									<div style="width:100%;">
+										<a id="lnkFactDeta" data-theme="b" data-role="button" class="ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" 
+										href="#" role="button" onclick="agregarLineasFactura();return false;">Agregar</a>
+									</div>
+								</td>
+								<td colspan="2">
+									<table id="tbl-deta-fac" style="width: 100%">
+										<tr>
+											<th>
+												 Correlativo
+											</th>
+											<th>
+												Tipo de Transacci&oacute;n
+											</th>
+											<th>
+												Número de Cuenta
+											</th>
+											<th style="text-align:right;">
+												Valor Lps.
+											</th>
+											<th>
+												
+											</th>
+										</tr>
+										<tbody id="details">
+											<tr id="nothing">
+												<td colspan="4">
+													No Hay Ninguna Transacci&oacute;n
+												</td>
+											</tr>
+										</tbody>
+										<tfoot>
+										<tr>
+											<td colspan="3" style="text-align:right">
+												 <strong>Total:</strong>
+											</td>
+											<td style="text-align:right">
+												<input type="hidden" name="txt_fac_total" id="txt_fac_total" value="0" />
+												 <span id="lbl_fac_total" class="lbl_nformat" style="font-weight:bold;">0.00</span>
+											</td>
+											<td>&nbsp;</td>
+										</tr>
+										</tfoot>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_facturacion');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- PAGE productos-->
 		<div data-role="page" data-theme="a" class="bg-interna2" id="pag_productos">
 			<div class="interna">
 				<div class="header">
@@ -944,29 +1275,258 @@ Observaciones:<br />
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 					<div class="box-productos1">
-							<h1>Selección de producto financiero para: </h1>
+							<h1>Selección de Producto Financiero para: </h1>
 							<div class="box-productos2"><span id="productos_nombreCliente"></span> <img src="images/photo.png" width="53" height="45" /></div></div>
 						<div class="detalle-cliente">
-							<h2>Solicitudes de crédito ingresadas:</h2> <span id='sol_credit_ing'>0</span> crédito(s)<br />
-							<h2> Solicitud de Cuenta de Ahorros:</h2> <span id='sol_cue_ahorro'>0</span> solicitud(es)<br />
-							<h2> Solicitud de Depósitos:</h2> <span id='sol_depos'>0</span> solicitud(es)<br />
-							<h2> Solicitud de Remesas:</h2> <span id='sol_remesas'>0</span> solicitud(es)
+							<h2 style="display: inline-block;width: 40%;">Solicitudes de Crédito Ingresadas:</h2> <span class="info_ingresos" id="lnkPrdCrd"><span id='sol_credit_ing'>0</span> crédito(s)</span><br />
+							<h2 style="display: inline-block;width: 40%;">Solicitudes de Cuenta de Ahorros:</h2> <span class="info_ingresos" id="lnkPrdAho"><span id='sol_cue_ahorro'>0</span> solicitud(es)</span><br />
+							<h2 style="display: inline-block;width: 40%;">Solicitudes de Depósitos:</h2> <span class="info_ingresos" id="lnkPrdDep"><span id='sol_depos'>0</span> solicitud(es)</span><br />
+							<h2 style="display: inline-block;width: 40%;">Solicitudes de Remesas:</h2> <span class="info_ingresos" id="lnkPrdRem"><span id='sol_remesas'>0</span> solicitud(es)</span>
 					</div>
 					<div class="bot-procreditos">
-						<img src="images/ico-sol-credito.png" onclick="irOpcion('creditos');return false;"/>
+						<img src="images/ico-sol-credito.png" onclick="limpiarForm('div_datosCreditos');irOpcion('creditos');return false;"/>
 				  	</div>
 				    <div class="bot-procuentas">
-						<img src="images/ico-sol-ahorros.png" onclick="irOpcion('ahorros');return false;"/>
+						<img src="images/ico-sol-ahorros.png" onclick="limpiarForm('div_ahorros'); irOpcion('ahorros');return false;"/>
 				  	</div>
 				  	<div class="bot-prodepositos">
-						<img src="images/ico-sol-deposito.png" onclick="irOpcion('depositosPlazo');return false;"/>
+						<img src="images/ico-sol-deposito.png" onclick="limpiarForm('div_depositosPlazo'); irOpcion('depositosPlazo');return false;"/>
 				  	</div>
-			 	 	<div class="bot-remesas">
-						<img src="images/ico-remesas.png" onclick="irOpcion('remesas');return false;"/>
-			  		</div>
+					
 			</div><!-- /content -->
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE client_product_list -->
+		<div data-role="page" data-theme="a" class="bg-interna2" id="pag_client_product_list">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+				<div class="head-clientes">
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> <span id='lb_cliente'>Solicitudes Realizadas</span></div>
+				</div>
+				<div class="cuerpo-interna" style="overflow: scroll;height: 520px;">
+				    <div class="box-productos1" style="position:relative;top:0;left: 20px;">
+						<div class="box-productos2">
+							<span id="lbl_cliNomb"></span><img src="images/photo.png" width="53" height="45" style="top: 8px;">
+						</div>
+					</div>
+					<div style="width:95%;margin:0 auto;" id="grid-clients" class="grid-view">
+						<table class="items table table-striped table-bordered">
+							<thead>
+								<tr id="head-credito">
+									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c1">Producto</th>
+									<th id="grid-clients_c2">Monto Solicitado</th>
+									<th id="grid-clients_c3">Plazo</th>
+									<th id="grid-clients_c4">Destino</th>
+									<th id="grid-clients_c5">Fecha</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+								<tr id="head-ahorro" style="display:none;">
+									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c1">Producto</th>
+									<th id="grid-clients_c2">Monto de Apertura</th>
+									<th id="grid-clients_c5">Fecha</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+								<tr id="head-deposito" style="display:none;">
+									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c1">Producto</th>
+									<th id="grid-clients_c2">Monto de Apertura</th>
+									<th id="grid-clients_c3">Plazo</th>
+									<th id="grid-clients_c5">Fecha</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+								<tr id="head-remesa" style="display:none;">
+									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c1">Tipo de Transaccion</th>
+									<th id="grid-clients_c2">MTCN</th>
+									<th id="grid-clients_c3">Pais de Envio</th>
+									<th id="grid-clients_c5">Fecha</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody  id="ul_detalleProducto_list"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="irOpcion('productos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE garantias_list -->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_garantias_list">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+				<div class="head-clientes">
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> <span id='lb_cliente'>Garantias Existentes</span></div>
+					<div class="botonera-categoria">
+						<table style="width: 100%">
+							<tr><td width="37%">&nbsp;</td>
+							<td>
+								<form class="ui-filterable">
+								    <input name="txt_fidu_findCliente" type="text" class="sel-buscar" id="txt_fidu_findCliente" placeholder="Buscar por nombre" data-type="search"/>
+								</form>
+							</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="cuerpo-interna" style="overflow: scroll;height: 520px;">
+				    <div class="box-productos1" style="position:relative;top:0;left: 20px;">
+						<div class="box-productos2">
+							<span id="lbl_gtia_selcliNomb"></span><img src="images/photo.png" width="53" height="45" style="top: 8px;">
+						</div>
+					</div>
+					<div style="float:right;width: 13%;margin-right: 3%;"><a href="#" id="newGarantia" onclick="" data-role="button" data-theme="b" class="ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" role="button">Nueva Garantia</a></div>
+					<div style="width:95%;margin:0 auto;" id="grid-garantias" class="grid-view">
+						<table class="items table table-striped table-bordered">
+							<thead>
+								<tr id="head-fiduciario">
+									<th id="grid-clients_c0">ID</th>
+									<th id="grid-clients_c1">No. Identidad</th>
+									<th id="grid-clients_c2">Nombres</th>
+									<th id="grid-clients_c3">Apellidos</th>
+									<th id="grid-clients_c4">Valor</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+								<tr id="head-hipotecario" style="display:none;">
+									<th id="grid-clients_c0">ID</th>
+									<th id="grid-clients_c1">Tipo de Inmueble</th>
+									<th id="grid-clients_c2">Numero</th>
+									<th id="grid-clients_c3">Tomo</th>
+									<th id="grid-clients_c4">Valor</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody  id="ul_detalleElemento_list"></tbody>
+						</table>
+						<table class="items table table-striped table-bordered" id="head-prendario_vehiculo" style="display:none;">
+							<thead>
+								<tr>
+									<th id="grid-clients_c0">VEHICULAR</th>
+									<th id="grid-clients_c1">Marca</th>
+									<th id="grid-clients_c2">Modelo</th>
+									<th id="grid-clients_c3">Placa</th>
+									<th id="grid-clients_c4">Valor</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody  id="ul_detalleVehiculos_list"></tbody>
+						</table>
+						<table class="items table table-striped table-bordered" id="head-prendario_maquinaria" style="display:none;">
+							<thead>
+								<tr>
+									<th id="grid-clients_c0">MAQUINARIA</th>
+									<th id="grid-clients_c1">Tipo de Bien</th>
+									<th id="grid-clients_c2">Valor</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody  id="ul_detalleMaquinaria_list"></tbody>
+						</table>
+						<table class="items table table-striped table-bordered" id="head-prendario_ahorro" style="display:none;">
+							<thead>
+								<tr>
+									<th id="grid-clients_c0">AHORROS</th>
+									<th id="grid-clients_c1">Clase de Gtia.</th>
+									<th id="grid-clients_c2">Nombre cuenta</th>
+									<th id="grid-clients_c3">No. de Documento.</th>
+									<th id="grid-clients_c4">Valor</th>
+									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody  id="ul_detalleAhorro_list"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" data-rel="back"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+        
+		<!-- PAGE sincronizar -->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_sincronizar">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+
+				<div class="bg-sincronizar">
+					<h2></h2>
+					<div id="btn_sincro" class="bot-sincronizar"><img src="images/bot-i-sincronizar.png" width="176" height="38" onclick="enviarDatosAWeb(); return false;"/></div>
+					<div class="fecha-sincro">Última Sincronización:  <span id="sp_fec_sincronizacion"></span><input type="hidden" name="lstdSincro" id="lstdSincro" value=""></div>
+				</div>
+				<div id="msgSincro" style="width:40%;margin:0 auto; color:green"></div>
+				<div class="sel-sincronizar">
+					<h2>Opciones de Sincronización:</h2>
+					<div id="div_btn_datosSincro">
+						<input name="sperfiles" type="checkbox" id="sperfiles" checked="checked" readonly="readonly" /><label for="sperfiles">Sincronizar Perfiles</label>
+						<input name="ssolicitudes" type="checkbox" id="ssolicitudes" checked="checked" readonly="readonly" /><label for="ssolicitudes">Sincronizar Solicitudes</label>
+						<input type="checkbox" name="simagenes" id="simagenes" checked="checked" readonly="readonly" /><label for="simagenes">Sincronizar Imagenes</label>					
+					</div>
+					<div id="div_btn_formDinamicos">
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><input data-icon="alert" value="1) Form Datos Clientes" type="button" onclick="sincronizarFormDinamicos(1); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="5) Form Solicitud de Credito" type="button" onclick="sincronizarFormDinamicos(2); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="2) Form Aperturas Cuentas de Ahorro" type="button" onclick="sincronizarFormDinamicos(3); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="6) Form Garantia Fiduciaria" type="button" onclick="sincronizarFormDinamicos(5); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="3) Form Aperturas Depositos a Plazo" type="button" onclick="sincronizarFormDinamicos(4); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="7) Form Garantia Hipotecaria" type="button" onclick="sincronizarFormDinamicos(6); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="4) Form de Remesas" type="button" onclick="sincronizarFormDinamicos(8); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="8) Form Garantia Prendaria" type="button" onclick="sincronizarFormDinamicos(7); return false;"></div>
+						</div>
+						
+						<h2>Sincronizaciones Especiales</h2>
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><input data-icon="alert" value="9) Productos" type="button" onclick="sincronizarTablas('productos'); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="10) CIIU" type="button" onclick="sincronizarTablas('ciiu'); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="11) Destino/Rubro/Actividades" type="button" onclick="sincronizarTablas('destino'); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="12) Departamento/Municipio/Aldea" type="button" onclick="sincronizarTablas('departamento'); return false;"></div>
+						</div>
+					</div>
+				</div>
+				<div data-role="popup" id="popupResult" class="ui-content ui-corner-all" data-theme="b">
+				  <p id="contentPop">&nbsp;</p>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<!-- PAGE mensajeExitos-->
@@ -998,33 +1558,20 @@ Observaciones:<br />
 				<div class="bot-aplicar-producto" style="margin-top:37px;display: none;" id="btn_sel_producto">
 					<img src="images/aplicar-producto.png" width="176" height="38" onclick="irOpcion($('input[name=\'sel_producto\']:checked').val());return false;"/>
 				</div>
+				<div class="bot-regresar" style="margin-top:37px;display: none;" id="btn_reg_producto">
+					<img src="images/bot-regresar.png" width="176" height="38" onclick="irOpcion('principal');return false;"/>
+				</div>
 			</div><!-- /content -->
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		<!-- PAGE remesas-->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_remesas">
-		<div class="interna">
-				<div class="header">
-					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
-					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a id="lnkMsgExitoReturn" data-theme="b" href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
 				</div>
-				<div class="head-clientes">
-					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Remesas</div>
-				</div>
-			<div role="main" class="cuerpo-interna" id="div_remesas"></div>
-		</div>
-			<div class="footbar">
-				<div class="bot-regresar"> <a href="#" onclick="irOpcion('productos');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-				<div class="bot-guardar"> <a href="#" onclick="guardarFormulario('div_remesas');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></div>
 			</div>
-		</div>
-        <!-- PAGE sincronizar -->
-		<div data-role="page" data-theme="a" class="bg-interna" id="pag_sincronizar">
+		</div> 
+		<!-- PAGE mensajeResumenTransferencias-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_msgResumenTrans">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
@@ -1033,36 +1580,30 @@ Observaciones:<br />
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
-
-				<div class="bg-sincronizar">
-					<h2></h2>
-					<div id="btn_sincro" class="bot-sincronizar"><img src="images/bot-i-sincronizar.png" width="176" height="38" onclick="enviarDatosAWeb(); return false;"/></div>
-					<div class="fecha-sincro">Última sincronización:  <span id="sp_fec_sincronizacion"></span></div>
-				</div>
-				<div class="sel-sincronizar">
-					<h2>Opciones de sincronización:</h2>
-					<div id="div_btn_datosSincro">
-						<input name="sperfiles" type="checkbox" id="sperfiles" checked="checked" /><label for="sperfiles">Sincronizar Perfiles</label>
-						<input name="ssolicitudes" type="checkbox" id="ssolicitudes" checked="checked" /><label for="ssolicitudes">Sincronizar Solicitudes</label>
-						<input type="checkbox" name="simagenes" id="simagenes" /><label for="simagenes">Sincronizar Imagenes</label>					
-					</div>
-					<div id="div_btn_formDinamicos">
-						<input data-icon="alert" value="1) Form Datos Clientes" type="button" onclick="sincronizarFormDinamicos(1); return false;">
-						<input data-icon="alert" value="2) Form Solicitud de Credito" type="button" onclick="sincronizarFormDinamicos(2); return false;">
-						<input data-icon="alert" value="3) Form Aperturas Cuentas de Ahorro" type="button" onclick="sincronizarFormDinamicos(3); return false;">
-						<input data-icon="alert" value="4) Form Aperturas Depositos a Plazo" type="button" onclick="sincronizarFormDinamicos(4); return false;">
-						<input data-icon="alert" value="5) Form Garantia Fiduciaria" type="button" onclick="sincronizarFormDinamicos(5); return false;">
-						<input data-icon="alert" value="6) Form Garantia Hipotecaria" type="button" onclick="sincronizarFormDinamicos(6); return false;">
-						<input data-icon="alert" value="7) Form Garantia Prendaria" type="button" onclick="sincronizarFormDinamicos(7); return false;">
-						<input data-icon="alert" value="8) Form de Remesas" type="button" onclick="sincronizarFormDinamicos(8); return false;">
+				<div class="bg-exito" id="div_contentMessage_2"></div>
+				<div class="cuerpo-interna" style="overflow: scroll;height: 520px;">
+				    <div id="grid-clients" class="grid-view">
+						<table border="1" style="width:100%;border-collapse:collapse;" class="table-striped table-bordered ui-responsive"
+							data-role="table">
+							<thead>
+							<tr>
+								<th >&nbsp;</th><th style="text-align: center;">Perfil</th><th style="text-align: center;">Credito</th><th style="text-align: center;">Ahorro</th><th style="text-align: center;">Deposito</th><th style="text-align: center;">Remesa</th><th style="text-align: center;">Factura</th>
+							</tr>
+							</thead>
+							<tbody id="ul_detalleSincronizacion_list"></tbody>
+						</table>
 					</div>
 				</div>
+			</div><!-- /content -->
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
 			</div>
-			<div class="footbar">
-				<div class="bot-regresar"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
-			</div>
-		</div>
-		 <!-- PAGE popupDialog -->
+		</div>		
+		<!-- PAGE Notas -->
 		<div data-role="page" data-theme="a" data-dialog="true" id="pag_notas">
 			<div data-role="header" data-theme="a" role="banner" class="ui-header ui-bar-a">
 				<h4 class="ui-title" role="heading">Notas Personales</h4>
@@ -1074,14 +1615,20 @@ Observaciones:<br />
 				<div class="bot-regresar" style="text-align: center;width:46%;"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></div>
 			</div>
 		</div>
+		
 		<script type="text/javascript" src="js/fastclick.js"></script>
-   	    <script type="text/javascript" src="cordova.js"></script>
+ 		<script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
-		<script type="text/javascript" src="js/jquery.autoNumeric.js"></script>
 		<script type="text/javascript" src="js/jquery.mask.min.js"></script>
-        <script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/jquery.numbox-1.1.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.autoNumeric.js"></script>
+		<!-- Agregando elemento para paginado -->
+		<script type="text/javascript" src="js/iscroll.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile.iscrollview.js"></script>
+		<!-- Desarrollo de la aplicacion -->
         <script type="text/javascript" src="js/app_complemento.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/objectCliente.js"></script>
         <script type="text/javascript">
        		var sinRepeticion = 0;//varible global, para controlar solo una vez las cargas de datos

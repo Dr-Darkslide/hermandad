@@ -7,12 +7,20 @@ body {
 	padding: 0px;
 	background-color: #07765E;
 }
+
+input, textarea{
+	text-transform: uppercase;
+}
+
 .bg-login {
 	background-image: url(../images/bg-login.jpg);
 	background-repeat: no-repeat;
 	background-position: center top;
 	min-height: 790px;
 	width: 100%;
+}
+.bg-login input {
+	text-transform: none;
 }
 .login {
 	width: 1280px;
@@ -90,15 +98,21 @@ body {
 }
 .bot-home2 {
 	position: absolute;
-	left: 532px;
+	left: 406px; /* left: 532px; */
 	top: 315px;
 	width: 160px;
 }
 .bot-home3 {
 	position: absolute;
-	left: 950px;
+	left: 681px; /* left: 950px; */
 	top: 315px;
 	width: 160px;
+}
+.bot-home4 {
+	position: absolute;
+	left: 950px;
+    top: 315px;
+    width: 160px;
 }
 .info-sincronizar {
 	position: absolute;
@@ -166,7 +180,7 @@ body {
 }
 #interna, .interna {
 	width: 1280px;
-	min-height: 790px;
+	min-height: 780px;
 	position: relative;
 	margin-right: auto;
 	margin-left: auto;
@@ -191,6 +205,10 @@ body {
 	color: #0C614E;
 	float: left;
 	padding-bottom: 30px;
+	border-radius: 0.6em; 
+	-moz-border-radius: 0.6em; /* Firefox */ 
+	-webkit-border-radius:0.6em; /* Safari y Chrome */ 
+
 }
 .titulo-categoria {
 	color: #E7F3D6;
@@ -314,7 +332,7 @@ body {
 .bot-sup {
 	margin: 0px;
 	float: right;
-	width: 36px;
+	width: 40px;
 	border-left-width: 1px;
 	border-left-style: solid;
 	border-left-color: #8AC837;
@@ -322,12 +340,12 @@ body {
 	padding-top: 7px;
 	padding-right: 5px;
 	padding-bottom: 0px;
-	padding-left: 15px;
+	padding-left: 20px;
 }
 .bot-sup-lo {
 	margin: 0px;
 	float: right;
-	width: 36px;
+	width: 46px;
 	border-left-width: 1px;
 	border-left-style: solid;
 	border-left-color: #8AC837;
@@ -335,7 +353,7 @@ body {
 	padding-top: 7px;
 	padding-right: 0px;
 	padding-bottom: 0px;
-	padding-left: 10px;
+	padding-left: 20px;
 }
 .footbar {
 	background-image: url(../images/bg-footbar.jpg);
@@ -455,13 +473,13 @@ body {
 }
 .bot-procuentas {
 	position: absolute;
-	left: 405px;
+	left: 532px; /* left: 405px; */
 	top: 335px;
 	width: 160px;
 }
 .bot-prodepositos {
 	position: absolute;
-	left: 676px;
+	left: 950px; /* left: 676px; */
 	top: 335px;
 	width: 160px;
 }
@@ -566,7 +584,7 @@ body {
 	font-size: 16px;
 	line-height: 24px;
 	text-decoration: none;
-	width: 50%;
+	width: 60%;
 	margin: 0 auto;
 }
 .sel-sincronizar h2
@@ -592,15 +610,30 @@ body {
 	/* position: absolute; */
 	/* left: 640px; */
 	/* top: 200px; */
-	font-size: 18px;
+	font-size: 17px; /* font-size: 18px; */
 	line-height: 20px;
 	color: #C5E3B3;
-	padding-left: 162px;
+	 padding-left: 215px; /* padding-left: 162px; */
 }
 
-.format_number, input.format_number, span.format_number {
+.format_number, input.format_number, span.format_number, span.lbl_nformat {
 	text-align:right;
 	padding-right:10px;
+}
+
+.info_ingresos {
+	display: inline-block;
+	width: 20%;
+	color: white;
+	background: #9BCF7D;
+	padding-left: 10px;
+}
+
+
+.showFidu, .showHipo, .showPrend {
+	color: #54cc60;
+	text-decoration: none;
+	line-height: 40px;
 }
 
 /* Sobreescritura de Estilos */
