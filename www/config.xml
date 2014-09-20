@@ -9,16 +9,8 @@
 	<author href="http://www.arkad.com.sv" email="info@arkad.com.sv">Arkad Studio</author>
 <!-- Main Configuration -->
 <gap:config-file platform="android" parent="/manifest">
-	<supports-screens 	android:anyDensity="true" android:resizeable="true" 
-						android:smallScreens="true" 
-						android:normalScreens="true" 
-						android:largeScreens="true" 
-						android:xlargeScreens="true" />
-	<activity 	android:launchMode="singleInstance"
-				android:screenOrientation="landscape"
-				android:alwaysRetainTaskState="true" />
+	<activity android:launchMode="singleInstance" android:alwaysRetainTaskState="true"  android:configChanges="locale|keyboard|keyboardHidden|orientation" />
 </gap:config-file>
-
 <!--
 If you do not want any permissions to be added to your app, add the
 following tag to your config.xml; you will still have the INTERNET
@@ -32,6 +24,7 @@ permission on your app, which PhoneGap requires.
 <preference name="fullscreen" value="true" /> <!-- all: hides the status bar at the top of the screen -->
 <preference name="android-minSdkVersion" value="10" /> <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
 <preference name="android-installLocation" value="auto" /> <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
+<preference name="android-windowSoftInputMode" value="adjustPan" />
 
 <!-- Plugins -->
 <!-- Core plugins -->
