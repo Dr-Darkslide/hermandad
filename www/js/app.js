@@ -121,12 +121,12 @@ app.onDeviceReady = function() {
 //--------------------------------------------------------
 function app_log(tarea)
 {
-	app.webdb.abrir();
 	var db = app.webdb.db;
-	
-	db.transaction(function(tx){
-		tx.executeSql("INSERT INTO LOGS(TAREA,FECHA) VALUES(?,strftime('%Y-%m-%d %H:%M:%S','now','localtime'))",[tarea]);
-	});
+	if(db !== null) {
+		db.transaction(function(tx){
+			tx.executeSql("INSERT INTO LOGS(TAREA,FECHA) VALUES(?,strftime('%Y-%m-%d %H:%M:%S','now','localtime'))",[tarea]);
+		});
+	}
 	console.log(tarea);
 }
 
@@ -265,10 +265,7 @@ function inicialLogin()
 //--------------------------------------------------------
 app.webdb.abrir = function() {
 	var dbSize = 250 * 1024 * 1024; // 25MB
-	
-	if(app.webdb.db == null) {
-		app.webdb.db = openDatabase("funMicroHerHonduras", "1.0", "Datos para Microfinaciera", dbSize);
-	}
+	app.webdb.db = openDatabase("funMicroHerHonduras", "1.0", "Datos para Microfinaciera", dbSize);
 };
 //crear la tablas si existen
 app.webdb.crear_tablas = function(){

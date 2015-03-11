@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget id = "sv.com.chuckle.arkad"
+<widget id = "sv.com.arkad.app.hdh"
 		xmlns = "http://www.w3.org/ns/widgets"
 		xmlns:gap = "http://phonegap.com/ns/1.0"
 		xmlns:android   = "http://schemas.android.com/apk/res/android"
-		version = "1.0.0">
+		version = "1.7.8">
 	<name>HDH Móvil</name>
 	<description>Aplicación interna para captación de formularios de créditos.</description>
 	<author href="http://www.arkad.com.sv" email="info@arkad.com.sv">Arkad Studio</author>
