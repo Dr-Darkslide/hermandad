@@ -9,7 +9,7 @@
 	<author href="http://www.arkad.com.sv" email="info@arkad.com.sv">Arkad Studio</author>
 <!-- Main Configuration -->
 <gap:config-file platform="android" parent="/manifest">
-	<activity android:launchMode="singleInstance" android:alwaysRetainTaskState="true"  android:configChanges="locale|keyboard|keyboardHidden|orientation" />
+	<activity android:launchMode="singleInstance" android:alwaysRetainTaskState="true" android:configChanges="locale|keyboard|keyboardHidden|orientation" />
 </gap:config-file>
 <!--
 If you do not want any permissions to be added to your app, add the
@@ -18,7 +18,7 @@ permission on your app, which PhoneGap requires.
 -->
 <preference name="permissions" value="none"/>
 <!-- Customize your app and platform with the preference element. -->
-<preference name="phonegap-version" value="3.5.0" /> <!-- all: current version of PhoneGap -->
+<preference name="phonegap-version" value="3.6.3" /> <!-- all: current version of PhoneGap -->
 <preference name="orientation" value="landscape" /> <!-- all: default means both landscape and portrait are enabled -->
 <preference name="target-device" value="universal" /> <!-- all: possible values handset, tablet, or universal -->
 <preference name="fullscreen" value="true" /> <!-- all: hides the status bar at the top of the screen -->

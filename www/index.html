@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
         <link rel="stylesheet" type="text/css" href="css/themes/Hermandad.min.css" />
         <link rel="stylesheet" type="text/css" href="css/themes/jquery.mobile.structure-1.4.2.min.css" />
         <link rel="stylesheet" type="text/css" href="css/themes/jquery.mobile.icons.min.css" />
@@ -12,6 +12,7 @@
 		<!-- Usamos un nuevo elemento para paginado -->
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.iscrollview.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.iscrollview-pull.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.datebox.css" />
 		<!-- Diseño del sitio completo -->
         <link rel="stylesheet" type="text/css" href="css/estilo-captador.css" />
         <title>HDH Móvil</title>
@@ -25,29 +26,33 @@
 						<div class="campo1">
 							Usuario:<br /><input id="txt_user" type="text" class="campo-e1" />
 						</div>							
-						<div class="campo1">
+						<div class="campo2">
 							Contraseña:<br /><input id="txt_pass" type="password" class="campo-e1" />
 						</div>
 						<input data-theme="b" onclick="inicialLogin();return false;" type="button" class="bot-enviar-login" value="Iniciar sesi&oacute;n" />
+						<div class="versiontext" style="text-align: right;text-transform: initial;"><br>Dseta v1.7.8</div>
 					</div>
 					<br />
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE principal-->
 		<div data-role="page" data-theme="a" class="bg-home" id="pag_principal">
 			<div role="main" class="home">
 				<div id="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 				<div class="info-sincronizar"><br />
-					<h3>Fecha de &uacute;ltima sincronizaci&oacute;n:</h3>
+					<h3>&Uacute;ltima sincronizaci&oacute;n:</h3>
 						<span id="sp_fec_sincronizacion2"></span>
 				</div>
+				<div style="position: absolute;left: 585px;  top: 210px;color: #E2FA74;"><br>Dseta v1.7.8</div>
 	  		    <div class="bot-home1">
 					<img src="images/bot-home1.png" onclick="paginaActual=1;irOpcion('clientes_list');return false;"/>
 			  	</div>
@@ -60,16 +65,25 @@
 				<div class="bot-home4">
 						<img src="images/bot-home4.png" onclick="paginaActual=4;irOpcion('clientes_list_remesas');return false;"/>
 			  		</div>
-			  	<div class="avisos"><span id="sp_mensaje"></span></div>
+				<div class="avisos">
+					<div class="target" id="target4"></div>
+					<div id="logo"><img src="images/logo-avisos.png" width="120" height="145"></div>
+					<div class="text-avisos">
+					  <span id="sp_mensaje"></span>
+					  <h3 id="fh_publicacion"></h3>
+					</div>
+				</div>
 			</div><!-- /content -->
 		</div>
+		
 		<!-- PAGE clientes_list-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_clientes_list">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="limpiarForm('div_datosGenerales'); irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -77,10 +91,10 @@
 					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> <span id='lb_cliente'>Clientes</span></div>
 					<div class="botonera-categoria">
 						<table style="width: 100%">
-							<tr><td width="37%"><img src="images/bot-i-nuevocliente.png" width="176" height="38"  onclick="irOpcion('clientes','div_datosGenerales');return false;"/></td>
+							<tr><td width="37%"><img src="images/bot-i-nuevocliente.png" id="btn_new_client" width="176" height="38"  onclick="irOpcion('clientes','div_datosGenerales');return false;"/></td>
 							<td>
 								<form class="ui-filterable">
-								    <input name="txt_findCliente" type="text" class="sel-buscar" id="txt_findCliente" placeholder="Buscar por nombre" data-type="search"/>
+								    <input name="txt_findCliente" type="text" class="sel-buscar" id="txt_findCliente" placeholder="Buscar por nombre/identidad" data-type="search"/>
 								</form>
 							</td>
 							</tr>
@@ -89,18 +103,18 @@
 				</div>
 				<div class="cuerpo-interna" style="overflow: scroll;height: 520px;">
 				    <div id="grid-clients" class="grid-view">
-						<div id="fctnc" style="text-align:right;float: right;margin-right: 1%;display:none;"><a data-role="button" data-theme="b" href="#" onclick="irOpcion('facturacion');return false;">Facturar no Cliente</a></div>
+						<div id="fctnc" style="text-align:right;float: right;margin-right: 1%;display:none;"><a data-role="button" data-theme="b" href="#" onclick="irOpcion('facturacion');return false;">Facturar No Cliente</a></div>
 						<table border="1" style="width:100%;border-collapse:collapse;" id="tblClients" class="table-striped table-bordered ui-responsive"
 							data-filter="false" data-input="#txt_findCliente" data-role="table">
 							<thead>
 							<tr>
-								<th>&nbsp;</th><th>#</th><th>Cod. Cliente</th><th>Primer Nombre</th><th>Primer Apellido</th><th>No. Identidad</th><th>&nbsp;</th>
+								<th>&nbsp;</th><th>#</th><th>Código</th><th>Nombres</th><th>Apellidos</th><th>Identidad</th><th>&nbsp;</th>
 							</tr>
 							</thead>
 							<tbody id="ul_detalleCliente_list"></tbody>
 						</table>
 						<input type="hidden" name="hdnpag" id="hdnpag" value="0" />
-						<input type="button" id="btnpagcli" data-role="button" onclick="cargarListaCliente(0,$('#hdnpag').val(),250,0);return false;" value="Cargar más información" />
+						<input type="button" id="btnpagcli" data-role="button" data-theme="b" onclick="cargarListaCliente(0,$('#hdnpag').val(),250,0);return false;" value="Cargar más información" />
 					</div>
 				</div>
 			</div>
@@ -118,8 +132,9 @@
 			<div class="interna">
 				<div class="header">
 						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -132,7 +147,7 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosGenerales'); irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_datosGenerales');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_datosGenerales', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -143,8 +158,9 @@
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -182,18 +198,20 @@
 		            </ul>
 					<ul>
 		        		<li><a href="#" data-theme="b" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_datosCreditos'); irOpcion('productos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-		        		<li><a href="#" data-theme="b" onclick="guardarFormulario('div_datosCreditos');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+		        		<li><a href="#" data-theme="b" onclick="guardarFormulario('div_datosCreditos', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 		        	</ul>
 		        </div><!-- /navbar -->
 			</div><!-- /footer -->
 		</div>
+		
 		<!-- PAGE AVAL FIDUCIARIO-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_fiduciario">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -207,18 +225,20 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_fiduciario'); irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_fiduciario');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_fiduciario', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE hipotecaria-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_hipotecaria">
 		<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -232,18 +252,20 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_hipotecaria'); irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_hipotecaria');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_hipotecaria', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE prendaria-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_prendaria">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -257,18 +279,20 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_prendaria'); irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_prendaria');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_prendaria', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE evalFinanciera-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_evalFinanciera">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -284,97 +308,177 @@
 							<tr>
 								<td width="33%">
 									<label for="txt_fidu_noIdentidad">1. Número de Identidad:</label>
-									<input type="text" name="txt_evalfin_noIdentidad" id="txt_evalfin_noIdentidad" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
+									<input type="text" name="txt_evalfin_noIdentidad" id="txt_evalfin_noIdentidad" placeholder="" value="" data-mini="true" data-theme="a">
 								</td>
 								<td width="33%">
 									<label for="txt_fidu_nombre">2. Nombre:</label>
-									<input type="text" name="txt_evalfin_nombre" id="txt_evalfin_nombre" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
+									<input type="text" name="txt_evalfin_nombre" id="txt_evalfin_nombre" placeholder="" value="" data-mini="true" data-theme="a">
 								</td>
 								<td width="33%">
 									<label for="txt_fidu_codCliente">3. Código del Cliente:</label>
-									<input type="text" name="txt_evalfin_codCliente" id="txt_evalfin_codCliente" placeholder="" value="" readonly="readonly" data-mini="true" data-theme="a">
+									<input type="text" name="txt_evalfin_codCliente" id="txt_evalfin_codCliente" placeholder="" value="" data-mini="true" data-theme="a">
 								</td>	    					
 							</tr>
+							<tr>
+								<td width="33%">&nbsp;</td>
+								<td width="33%" style="text-align:right;padding-right:10px;">Evaluación</td>
+								<td width="33%"><select id="cb_tipoEvaluacion" name="cb_tipoEvaluacion" data-theme="b"><option value="1">Comercial</option><option value="2">Agricola</option></select></td>
+							</tr>
 						</table>
-					</div>
+				</div>
 				<div data-role="collapsible" data-collapsed="false">
 						<h4>Balance General (Valores en Lempiras)</h4>
-	<table  style="width: 100%; background-color:#cfcfcf;" border="1" cellspacing="0" cellpadding="0" summary="Balance General">
-	  <tr>
-		<td>4. Caja y Bancos:</td>
-		<td>&nbsp;</td>
-		<td align="right">
-		  <input type="number" class="format_number" name="txt_bal_cajasyBancos" value="" placeholder="0.00" id="txt_bal_cajasyBancos" />
-		</td>
-	  </tr>
-	  <tr>
-		<td>5. Cuentas por Cobrar</td>
-		<td>&nbsp;</td>
-		<td align="right"><input type="number" class="format_number" name="txt_bal_cuentasxCobrar" value="" placeholder="0.00" id="txt_bal_cuentasxCobrar" /></td>
-	  </tr>
-	  <tr>
-		<td>6. Inventarios (mercadería, Materia Prima, Proceso, Terminado)</td>
-		<td>&nbsp;</td>
-		<td align="right"><input type="number" class="format_number" name="txt_bal_inventario" value="" placeholder="0.00" id="txt_bal_inventario" /></td>
-	  </tr>
-	  <tr>
-		<td>7. Inversiones producción agropecuaria</td>
-		<td>&nbsp;</td>
-		<td align="right"><input type="number" class="format_number" name="txt_bal_invagro" value="" placeholder="0.00" id="txt_bal_invagro" /></td>
-	  </tr>
-	  <tr>
-		<td>&nbsp;</td>
-		<td align="center"><strong>8. Total Activo Circulante</strong></td>
-		<td align="right"><input name="txt_bal_activoCirculante" class="format_number" value="" placeholder="0.00" type="number" id="txt_bal_activoCirculante" readonly="readonly" style="font-weight:bold;" /></td>
-	  </tr>
-	  <tr>
-		<td><strong>9. Activo Fijo (Patrimonio)</strong></td>
-		<td>&nbsp;</td>
-		<td align="right"><input name="txt_bal_patrimonio" class="format_number" type="number" placeholder="0.00" id="txt_bal_patrimonio" value="" readonly="readonly" style="font-weight:bold;"  /></td>
-	  </tr>
-	  <tr>
-		<td>&nbsp;</td>
-		<td align="center"><strong>10. Total Activos</strong></td>
-		<td align="right"><input name="txt_bal_activos" class="format_number" type="number" placeholder="0.00" id="txt_bal_activos" value="" style="font-weight:bold;" readonly="readonly" /></td>
-	  </tr>
-	  <tr>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td align="right">&nbsp;</td>
-	  </tr>
-	  <tr>
-		<td>11. Cuentas por Pagar</td>
-		<td>&nbsp;</td>
-		<td align="right"><input type="number" name="txt_bal_cuentasxPagar" class="format_number" value="" placeholder="0.00" id="txt_bal_cuentasxPagar" /></td>
-	  </tr>
-	  <tr>
-		<td>12. Proveedores</td>
-		<td>&nbsp;</td>
-		<td align="right"><input type="number" name="txt_bal_proveedores" class="format_number" value="" placeholder="0.00" id="txt_bal_proveedores" /></td>
-	  </tr>
-	  <tr>
-		<td>&nbsp;</td>
-		<td align="center"><strong>13. Total Pasivo</strong></td>
-		<td align="right"><input name="txt_bal_pasivos" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_pasivos" style="font-weight:bold;" readonly="readonly" /></td>
-	  </tr>
-	  <tr>
-		<td>14. Capital</td>
-		<td>&nbsp;</td>
-		<td align="right"><input name="txt_bal_capital" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_capital"  style="font-weight:bold;" readonly="readonly" /></td>
-	  </tr>
-	  <tr>
-		<td><strong>15. Total Pasivo + Capital</strong></td>
-		<td>&nbsp;</td>
-		<td align="right"><input name="txt_bal_total" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_total" style="font-weight:bold;" readonly="readonly" /></td>
-	  </tr>
-	  <tr>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td align="right">&nbsp;</td>
-	  </tr>
-	</table>
+						<table  style="width: 100%; background-color:#cfcfcf;" border="1" cellspacing="0" cellpadding="0" summary="Balance General">
+						  <tr>
+							<td>4. Caja y Bancos:</td>
+							<td>&nbsp;</td>
+							<td align="right">
+							  <input type="number" class="format_number" name="txt_bal_cajasyBancos" value="" placeholder="0.00" id="txt_bal_cajasyBancos" />
+							</td>
+						  </tr>
+						  <tr>
+							<td>5. Cuentas por Cobrar</td>
+							<td>&nbsp;</td>
+							<td align="right"><input type="number" class="format_number" name="txt_bal_cuentasxCobrar" value="" placeholder="0.00" id="txt_bal_cuentasxCobrar" /></td>
+						  </tr>
+						  <tr>
+							<td>6. Inventarios (mercadería, Materia Prima, Proceso, Terminado)</td>
+							<td>&nbsp;</td>
+							<td align="right"><input type="number" class="format_number" name="txt_bal_inventario" value="" placeholder="0.00" id="txt_bal_inventario" /></td>
+						  </tr>
+						  <tr>
+							<td>7. Inversiones producción agropecuaria</td>
+							<td>&nbsp;</td>
+							<td align="right"><input type="number" class="format_number" name="txt_bal_invagro" value="" placeholder="0.00" id="txt_bal_invagro" /></td>
+						  </tr>
+						  <tr>
+							<td>&nbsp;</td>
+							<td align="center"><strong>8. Total Activo Circulante</strong></td>
+							<td align="right"><input name="txt_bal_activoCirculante" class="format_number" value="" placeholder="0.00" type="number" id="txt_bal_activoCirculante" readonly="readonly" style="font-weight:bold;" /></td>
+						  </tr>
+						  <tr>
+							<td><strong>9. Activo Fijo (Patrimonio)</strong></td>
+							<td>&nbsp;</td>
+							<td align="right"><input name="txt_bal_patrimonio" class="format_number" type="number" placeholder="0.00" id="txt_bal_patrimonio" value="" readonly="readonly" style="font-weight:bold;"  /></td>
+						  </tr>
+						  <tr>
+							<td>&nbsp;</td>
+							<td align="center"><strong>10. Total Activos</strong></td>
+							<td align="right"><input name="txt_bal_activos" class="format_number" type="number" placeholder="0.00" id="txt_bal_activos" value="" style="font-weight:bold;" readonly="readonly" /></td>
+						  </tr>
+						  <tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						  </tr>
+						  <tr>
+							<td>11. Cuentas por Pagar</td>
+							<td>&nbsp;</td>
+							<td align="right"><input type="number" name="txt_bal_cuentasxPagar" class="format_number" value="" placeholder="0.00" id="txt_bal_cuentasxPagar" /></td>
+						  </tr>
+						  <tr>
+							<td>12. Proveedores</td>
+							<td>&nbsp;</td>
+							<td align="right"><input type="number" name="txt_bal_proveedores" class="format_number" value="" placeholder="0.00" id="txt_bal_proveedores" /></td>
+						  </tr>
+						  <tr>
+							<td>&nbsp;</td>
+							<td align="center"><strong>13. Total Pasivo</strong></td>
+							<td align="right"><input name="txt_bal_pasivos" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_pasivos" style="font-weight:bold;" readonly="readonly" /></td>
+						  </tr>
+						  <tr>
+							<td>14. Capital</td>
+							<td>&nbsp;</td>
+							<td align="right"><input name="txt_bal_capital" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_capital"  style="font-weight:bold;" readonly="readonly" /></td>
+						  </tr>
+						  <tr>
+							<td><strong>15. Total Pasivo + Capital</strong></td>
+							<td>&nbsp;</td>
+							<td align="right"><input name="txt_bal_total" type="number" class="format_number" value="" placeholder="0.00" id="txt_bal_total" style="font-weight:bold;" readonly="readonly" /></td>
+						  </tr>
+						  <tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td align="right">&nbsp;</td>
+						  </tr>
+						</table>
 
-	</div>
+				</div>
+				<div data-role="collapsible" data-collapsed="false" style="display:none;" id="costoVentaAgricola" >
+					<h4>Estimacion las Ventas de Produccion Agricola</h4>
+					
+					<table cellspacing="0" cellpadding="0" style="width: 100%; background-color:#cfcfcf;" border="1" >
+						<tr>
+						  <td align="center">Cultivo</td>
+						  <td align="center">Mz a cultivar</td>
+						  <td align="center">Cosecha en QQ</td>
+						  <td align="center">Precio Venta</td>
+						  <td align="center">Total Venta</td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo1" id="txt_evalfin_caCultivo1" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo1" id="txt_evalfin_caMzCultivo1" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha1" id="txt_evalfin_caCocecha1" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta1').NumBox('getRaw'),'#txt_evalfin_caTotalVenta1');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta1" id="txt_evalfin_caPrecioVenta1" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha1').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta1');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta1" id="txt_evalfin_caTotalVenta1" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo2" id="txt_evalfin_caCultivo2" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo2" id="txt_evalfin_caMzCultivo2" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha2" id="txt_evalfin_caCocecha2" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta2').NumBox('getRaw'),'#txt_evalfin_caTotalVenta2');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta2" id="txt_evalfin_caPrecioVenta2" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha2').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta2');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta2" id="txt_evalfin_caTotalVenta2" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo3" id="txt_evalfin_caCultivo3" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo3" id="txt_evalfin_caMzCultivo3" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha3" id="txt_evalfin_caCocecha3" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta3').NumBox('getRaw'),'#txt_evalfin_caTotalVenta3');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta3" id="txt_evalfin_caPrecioVenta3" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha3').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta3');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta3" id="txt_evalfin_caTotalVenta3" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo4" id="txt_evalfin_caCultivo4" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo4" id="txt_evalfin_caMzCultivo4" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha4" id="txt_evalfin_caCocecha4" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta4').NumBox('getRaw'),'#txt_evalfin_caTotalVenta4');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta4" id="txt_evalfin_caPrecioVenta4" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha4').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta4');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta4" id="txt_evalfin_caTotalVenta4" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo5" id="txt_evalfin_caCultivo5" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo5" id="txt_evalfin_caMzCultivo5" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha5" id="txt_evalfin_caCocecha5" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta5').NumBox('getRaw'),'#txt_evalfin_caTotalVenta5');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta5" id="txt_evalfin_caPrecioVenta5" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha5').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta5');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta5" id="txt_evalfin_caTotalVenta5" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo6" id="txt_evalfin_caCultivo6" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo6" id="txt_evalfin_caMzCultivo6" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha6" id="txt_evalfin_caCocecha6" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta6').NumBox('getRaw'),'#txt_evalfin_caTotalVenta6');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta6" id="txt_evalfin_caPrecioVenta6" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha6').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta6');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta6" id="txt_evalfin_caTotalVenta6" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td><input type="text" name="txt_evalfin_caCultivo7" id="txt_evalfin_caCultivo7" placeholder="cultivo" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caMzCultivo7" id="txt_evalfin_caMzCultivo7" placeholder="0" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caCocecha7" id="txt_evalfin_caCocecha7" placeholder="0" value="" onblur="calcularValorAgricola($(this).val(),$('#txt_evalfin_caPrecioVenta7').NumBox('getRaw'),'#txt_evalfin_caTotalVenta7');" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caPrecioVenta7" id="txt_evalfin_caPrecioVenta7" class="format_number" onblur="calcularValorAgricola($('#txt_evalfin_caCocecha7').val(),$(this).NumBox('getRaw'),'#txt_evalfin_caTotalVenta7');" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						  <td><input type="number" name="txt_evalfin_caTotalVenta7" id="txt_evalfin_caTotalVenta7" class="format_number" readonly="readonly" placeholder="0.00" value="" data-mini="true" data-theme="a"></td>
+						</tr>
+						<tr>
+						  <td colspan="4" align="center">TOTAL VENTA</td>
+						  <td><input type="number" name="txt_evalfin_caSumaTotalVenta" id="txt_evalfin_caSumaTotalVenta" class="format_number" readonly="readonly" placeholder="0.00" style="font-weight:bold;"  value="" data-mini="true" data-theme="a"></td>
+						</tr>
+					</table>
+					<table cellspacing="0" cellpadding="0" style="width: 100%; background-color:#cfcfcf;" border="1" >
+					  <tr>
+						<td width="69%">&nbsp;</td>
+						<td width="19.4%" style="border-left:0px;">
+							<label for="txt_evalfin_cicloAgricola" style="text-align:right;">Meses del ciclo de la actividad:</label>
+							<input type="text" name="txt_evalfin_cicloAgricola" id="txt_evalfin_cicloAgricola" placeholder="" value="1" data-mini="true" data-theme="a">
+						</td>
+					  </tr>
+					</table>
+				</div>
 				<div data-role="collapsible" data-collapsed="false">
 					  <h4>Estados de Resultados (Valores en Lempiras)</h4>
 				<table cellspacing="0" cellpadding="0" style="width: 100%; background-color:#cfcfcf;" border="1" >
@@ -384,7 +488,7 @@
 					<td align="center" rowspan="2">Regular</td>
 					<td align="center" rowspan="2">Malo</td>
 					<td colspan="2" align="center">Mensual</td>
-					<td align="center">Anual</td>
+					<td align="center"><span id="valorAnualCiclo">Anual</span></td>
 				  </tr>
 				  <tr>
 					<td colspan="2" align="right"><input type="number" class="format_number" name="txt_res_sumaVenta" value="" placeholder="0.00"  style="font-weight:bold;" id="txt_res_sumaVenta" readonly="readonly" /></td>
@@ -666,11 +770,11 @@
 				  </tr>
 				  <tr>
 					<td>38. Monto de Préstamo Recomendado en Lempiras</td>
-					<td align="right"><input type="number" name="txt_cuo_montoRecomendado" class="format_number" id="txt_cuo_montoRecomendado" placeholder="0.00" value="" /></td>
+					<td align="right"><input type="number" name="txt_cuo_montoRecomendado" class="format_number" id="txt_cuo_montoRecomendado" placeholder="0.00" value="" required="required" /></td>
 					</tr>
 				  <tr>
 					<td>39. Plazo Recomendado (Meses)</td>
-					<td align="right"><input name="txt_cuo_plazo" style="text-align:right;" type="text" id="txt_cuo_plazo" readonly="readonly"  value="" placeholder="0.00" /></td>
+					<td align="right"><input name="txt_cuo_plazo" style="text-align:right;" type="text" id="txt_cuo_plazo" readonly="readonly"  value="" placeholder="0" /></td>
 				  </tr>
 				  <tr>
 					<td>40. Frecuencia de Pago (Número de Coutas)</td>
@@ -687,125 +791,124 @@
 				</table>
 				</div>
 				<div data-role="collapsible" data-collapsed="true">
-									<h4>Indicadores Financieros</h4>
-									<table style="width: 100%; background-color:#cfcfcf;">
-									<tbody><tr>
-									  <td colspan="3">Politica</td>
-									  <td>&nbsp;</td>
-									 </tr>
-															<tr>
-											<td>43. Rentabilidad</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond43" id="txt_efin_ind_cond43" value=">=">
-											<input type="hidden" name="txt_efin_ind_val43" id="txt_efin_ind_val43" value="25">
-											&gt;= 25%</td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind43" id="txt_efind_ind43" value="" readonly="readonly" style="background-color: red;"></div></td>
-										</tr>
-															<tr>
-											<td>44. Liquidez</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond44" id="txt_efin_ind_cond44" value=">=">
-											<input type="hidden" name="txt_efin_ind_val44" id="txt_efin_ind_val44" value="2">
-											&gt;= 2</td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind44" id="txt_efind_ind44" value="" readonly="readonly" style="background-color: red;"></div></td>
-										</tr>
-															<tr>
-											<td>45. Razán Acida</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond45" id="txt_efin_ind_cond45" value=">=">
-											<input type="hidden" name="txt_efin_ind_val45" id="txt_efin_ind_val45" value="1">
-											&gt;= 1</td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind45" id="txt_efind_ind45" value="" readonly="readonly" style="background-color: red;"></div></td>
-										</tr>
-															<tr>
-											<td>46. Endeudamiento</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond46" id="txt_efin_ind_cond46" value="<=">
-											<input type="hidden" name="txt_efin_ind_val46" id="txt_efin_ind_val46" value="50">
-											&lt;= 50%</td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind46" id="txt_efind_ind46" value="" readonly="readonly" style="background-color: red;"></div></td>
-										</tr>
-															<tr>
-											<td>47. Capital de Trabajo en Lempiras</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond47" id="txt_efin_ind_cond47" value="">
-											<input type="hidden" name="txt_efin_ind_val47" id="txt_efin_ind_val47" value="">
-											 </td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="number" name="txt_efind_ind47" class="format_number" data-v-min="-999999999.99" id="txt_efind_ind47" value="" readonly="readonly"></div></td>
-										</tr>
-															<tr>
-											<td>48. Capacidad de Pago del Negocio</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond48" id="txt_efin_ind_cond48" value=">=">
-											<input type="hidden" name="txt_efin_ind_val48" id="txt_efin_ind_val48" value="2">
-											&gt;= 2</td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind48" id="txt_efind_ind48" value="" readonly="readonly" style="background-color: red;"></div></td>
-										</tr>
-															<tr>
-											<td>49. Capacidad de Pago del Cliente</td>
-											<td></td>
-											<td>
-											<input type="hidden" name="txt_efin_ind_cond49" id="txt_efin_ind_cond49" value=">=">
-											<input type="hidden" name="txt_efin_ind_val49" id="txt_efin_ind_val49" value="2">
-											&gt;= 2</td>
-											<td><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" name="txt_efind_ind49" id="txt_efind_ind49" value="" readonly="readonly" style="background-color: red;"></div></td>
-										</tr>
+					<h4>Indicadores Financieros</h4>
+					<table style="width: 100%; background-color:#cfcfcf;">
+						<tbody>
+							<tr>
+								<td colspan="3">Politica</td>
+								<td>&nbsp;</td>
+							 </tr>
+							<tr>
+								<td>43. Rentabilidad</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond43" id="txt_efin_ind_cond43" value=">=">
+									<input type="hidden" name="txt_efin_ind_val43" id="txt_efin_ind_val43" value="15">
+									&gt;= 15%</td>
+								<td><input type="text" name="txt_efind_ind43" id="txt_efind_ind43" value="" readonly="readonly" style="text-align: right;"></td>
+							</tr>
+							<tr>
+								<td>44. Liquidez</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond44" id="txt_efin_ind_cond44" value=">=">
+									<input type="hidden" name="txt_efin_ind_val44" id="txt_efin_ind_val44" value="2">
+									&gt;= 2</td>
+								<td><input type="text" name="txt_efind_ind44" id="txt_efind_ind44" value="" readonly="readonly" style="text-align: right;"></td>
+							</tr>
+							<tr>
+								<td>45. Razán Acida</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond45" id="txt_efin_ind_cond45" value=">=">
+									<input type="hidden" name="txt_efin_ind_val45" id="txt_efin_ind_val45" value="1">
+									&gt;= 1</td>
+								<td><input type="text" name="txt_efind_ind45" id="txt_efind_ind45" value="" readonly="readonly" style="text-align: right;"></td>
+							</tr>
+							<tr>
+								<td>46. Endeudamiento</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond46" id="txt_efin_ind_cond46" value="<=">
+									<input type="hidden" name="txt_efin_ind_val46" id="txt_efin_ind_val46" value="50">
+									&lt;= 50%</td>
+								<td><input type="text" name="txt_efind_ind46" id="txt_efind_ind46" value="" readonly="readonly" style="text-align: right;"></td>
+							</tr>
+							<tr>
+								<td>47. Capital de Trabajo en Lempiras</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond47" id="txt_efin_ind_cond47" value="">
+									<input type="hidden" name="txt_efin_ind_val47" id="txt_efin_ind_val47" value="">
+								</td>
+								<td><input type="number" name="txt_efind_ind47" class="format_number" data-v-min="-999999999.99" id="txt_efind_ind47" value="" readonly="readonly"></td>
+							</tr>
+							<tr>
+								<td>48. Capacidad de Pago del Negocio</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond48" id="txt_efin_ind_cond48" value=">=">
+									<input type="hidden" name="txt_efin_ind_val48" id="txt_efin_ind_val48" value="2">
+									&gt;= 2</td>
+								<td><input type="text" name="txt_efind_ind48" id="txt_efind_ind48" value="" readonly="readonly" style="text-align: right;"></td>
+							</tr>
+							<tr>
+								<td>49. Capacidad de Pago del Cliente</td>
+								<td></td>
+								<td>
+									<input type="hidden" name="txt_efin_ind_cond49" id="txt_efin_ind_cond49" value=">=">
+									<input type="hidden" name="txt_efin_ind_val49" id="txt_efin_ind_val49" value="2">
+									&gt;= 2</td>
+								<td><input type="text" name="txt_efind_ind49" id="txt_efind_ind49" value="" readonly="readonly" style="text-align: right;"></td>
+							</tr>
 														 </tbody></table>
 									</div>
 				<div data-role="collapsible" data-collapsed="true">
 									<h4>Evaluación del Crecimiento del Negocio</h4>
-
-
-				<table cellspacing="0" cellpadding="0" border="1"  style="width: 100%; background-color:#cfcfcf;">
-				  <tr>
-					<td><strong>PARAMETROS</strong></td>
-					<td align="center" colspan="2" ><strong>PRÉSTAMO ACTUAL LPS.</strong></td>
-					<td align="center"><strong>PRÉSTAMO ANTERIOR LPS.</strong></td>
-					<td align="center"><strong>VARIACIÓN</strong></td>
-					<td align="center" colspan="2"><strong>%</strong></td>
-				  </tr>
-				  <tr>
-					<td> Activos</td>
-					<td align="right" colspan="2"><span id="t_activos" class="lbl_nformat"></span></td>
-					<td><span id="a_activos"><input type="number" class="format_number" name="txt_crec_activos_pasado" id="txt_crec_activos_pasado" value="" placeholder="0.00" /></span></td>
-					<td align="center"><span id="v_activos" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
-					<td align="center" colspan="2"><span id="p_activos"></span></td>
-				  </tr>
-				  <tr>
-					<td> Pasivo</td>
-					<td align="right" colspan="2"><span id="t_pasivos" class="lbl_nformat"></span></td>
-					<td><span id="a_pasivos"><input type="number" class="format_number" name="txt_crec_pasivos_pasado" id="txt_crec_pasivos_pasado" value="" placeholder="0.00" /></span></td>
-					<td align="center"><span id="v_pasivos" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
-					<td align="center" colspan="2"><span id="p_pasivos"></span></td>
-				  </tr>
-				  <tr>
-					<td> Capital</td>
-					<td align="right" colspan="2"><span id="t_capital" class="lbl_nformat"></span></td>
-					<td><span id="a_capital"><input type="number" class="format_number" name="txt_crec_capital_pasado" id="txt_crec_capital_pasado" value="" placeholder="0.00" /></span></td>
-					<td align="center"><span id="v_capital" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
-					<td align="center" colspan="2"><span id="p_capital"></span></td>
-				  </tr>
-				  <tr>
-					<td> Inventarios</td>
-					<td align="right" colspan="2"><span id="t_inventario" class="lbl_nformat"></span></td>
-					<td><span id="a_inventario"><input type="number" class="format_number" name="txt_crec_inventarios_pasado" id="txt_crec_inventarios_pasado" value="" placeholder="0.00" /></span></td>
-					<td align="center"><span id="v_inventario" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
-					<td align="center" colspan="2"><span id="p_inventario"></span></td>
-				  </tr>
-				  <tr>
-					<td> Utilidad</td>
-					<td align="right" colspan="2"><span id="t_utilidad" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
-					<td><span id="a_utilidad"><input type="number" class="format_number" name="txt_crec_utilidad_pasado" id="txt_crec_utilidad_pasado" value="" placeholder="0.00" /></span></td>
-					<td align="center"><span id="v_utilidad" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
-					<td align="center" colspan="2"><span id="p_utilidad"></span></td>
-				  </tr>
-				</table>
+							<table cellspacing="0" cellpadding="0" border="1"  style="width: 100%; background-color:#cfcfcf;">
+							  <tr>
+								<td><strong>PARAMETROS</strong></td>
+								<td align="center" colspan="2" ><strong>PRÉSTAMO ACTUAL LPS.</strong></td>
+								<td align="center"><strong>PRÉSTAMO ANTERIOR LPS.</strong></td>
+								<td align="center"><strong>VARIACIÓN</strong></td>
+								<td align="center" colspan="2"><strong>%</strong></td>
+							  </tr>
+							  <tr>
+								<td> Activos</td>
+								<td align="right" colspan="2"><span id="t_activos" class="lbl_nformat"></span></td>
+								<td><span id="a_activos"><input type="number" class="format_number" name="txt_crec_activos_pasado" id="txt_crec_activos_pasado" value="" placeholder="0.00" /></span></td>
+								<td align="center"><span id="v_activos" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+								<td align="center" colspan="2"><span id="p_activos"></span></td>
+							  </tr>
+							  <tr>
+								<td> Pasivo</td>
+								<td align="right" colspan="2"><span id="t_pasivos" class="lbl_nformat"></span></td>
+								<td><span id="a_pasivos"><input type="number" class="format_number" name="txt_crec_pasivos_pasado" id="txt_crec_pasivos_pasado" value="" placeholder="0.00" /></span></td>
+								<td align="center"><span id="v_pasivos" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+								<td align="center" colspan="2"><span id="p_pasivos"></span></td>
+							  </tr>
+							  <tr>
+								<td> Capital</td>
+								<td align="right" colspan="2"><span id="t_capital" class="lbl_nformat"></span></td>
+								<td><span id="a_capital"><input type="number" class="format_number" name="txt_crec_capital_pasado" id="txt_crec_capital_pasado" value="" placeholder="0.00" /></span></td>
+								<td align="center"><span id="v_capital" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+								<td align="center" colspan="2"><span id="p_capital"></span></td>
+							  </tr>
+							  <tr>
+								<td> Inventarios</td>
+								<td align="right" colspan="2"><span id="t_inventario" class="lbl_nformat"></span></td>
+								<td><span id="a_inventario"><input type="number" class="format_number" name="txt_crec_inventarios_pasado" id="txt_crec_inventarios_pasado" value="" placeholder="0.00" /></span></td>
+								<td align="center"><span id="v_inventario" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+								<td align="center" colspan="2"><span id="p_inventario"></span></td>
+							  </tr>
+							  <tr>
+								<td> Utilidad</td>
+								<td align="right" colspan="2"><span id="t_utilidad" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+								<td><span id="a_utilidad"><input type="number" class="format_number" name="txt_crec_utilidad_pasado" id="txt_crec_utilidad_pasado" value="" placeholder="0.00" /></span></td>
+								<td align="center"><span id="v_utilidad" class="lbl_nformat" data-v-min="-999999999.99"></span></td>
+								<td align="center" colspan="2"><span id="p_utilidad"></span></td>
+							  </tr>
+							</table>
 				</div>
 				<div style="width:95%;margin:0 auto;">
 					Observaciones:<br />
@@ -829,19 +932,21 @@
 			<div data-role="footer" data-position="fixed">			
 				<div data-role="navbar">
 					<ul>
-						<!-- <li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera');irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li> -->
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_evalFinanciera');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_evalFinanciera');irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_evalFinanciera', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE resolucion-->		
 		<div data-role="page" data-theme="a" class="bg-interna2" id="pag_resolucion">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -856,15 +961,15 @@
 							<tr>
 								<td width="33%">
 									<label for="txt_reso_noIdentidad">1. Número de Identidad:</label>
-									<input type="text" name="txt_reso_noIdentidad" id="txt_reso_noIdentidad" placeholder="" value="" readonly="readonly" data-theme="a">
+									<input type="text" name="txt_reso_noIdentidad" id="txt_reso_noIdentidad" placeholder="" value="" data-theme="a">
 								</td>
 								<td width="33%">
 									<label for="txt_reso_nombre">2. Nombre:</label>
-									<input type="text" name="txt_reso_nombre" id="txt_reso_nombre" placeholder="" value="" readonly="readonly" data-theme="a">
+									<input type="text" name="txt_reso_nombre" id="txt_reso_nombre" placeholder="" value="" data-theme="a">
 								</td>
 								<td width="33%">
 									<label for="txt_reso_codCliente">3. Código del Cliente:</label>
-									<input type="text" name="txt_reso_codCliente" id="txt_reso_codCliente" placeholder="" value="" readonly="readonly" data-theme="a">
+									<input type="text" name="txt_reso_codCliente" id="txt_reso_codCliente" placeholder="" value="" data-theme="a">
 								</td>	    					
 							</tr>
 						</table>
@@ -1023,6 +1128,7 @@
 							</tr>
 						</table>
 					</div>
+					<!--
 					<div data-role="collapsible" data-collapsed="true">
 						<h4>Firmas</h4>
 						<table style="width: 100%;background-color:#cfcfcf;">
@@ -1053,13 +1159,14 @@
 							</tr>
 						</table>
 					</div>
+					-->
 				</div>
 			</div>
 			<div data-role="footer" data-position="fixed">			
 				<div data-role="navbar">
 					<ul>
-						<!-- <li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion');irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li> -->
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_resolucion');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_resolucion');irOpcion('creditos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_resolucion', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -1070,8 +1177,9 @@
 			<div class="interna">
 					<div class="header">
 						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 					</div>
@@ -1084,18 +1192,20 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_ahorros');irOpcion('productos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_ahorros');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_ahorros', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE depositosPlazo-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_depositosPlazo">
 			<div class="interna">
 					<div class="header">
 						<div class="logo-home"><a href="#" onclick="ivar r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 					</div>
@@ -1108,18 +1218,20 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_depositosPlazo');irOpcion('productos');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_depositosPlazo');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_depositosPlazo', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE remesas-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_remesas">
 			<div class="interna">
 					<div class="header">
 						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas'); irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 					</div>
@@ -1132,7 +1244,7 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){limpiarForm('div_remesas');irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_remesas');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_remesas', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -1143,8 +1255,9 @@
 			<div class="interna">
 					<div class="header">
 						<div class="logo-home"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+						<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 						<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('buscar');return false;}"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('actualizarform');return false;}"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('sincronizar');return false;}"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 						<div class="bot-sup"><a href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('notas');return false;}"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 					</div>
@@ -1170,21 +1283,14 @@
 									<label for="txt_fac_fecha">3. Fecha:</label>
 									<input type="text" style="text-align: center;" readonly="readonly" name="txt_fac_fecha" id="txt_fac_fecha" placeholder="" value="">
 									<label for="txt_fac_usuario">4. Nombre del Usuario:</label>
+										<input type="hidden" name="hd_fac_usuario" id="hd_fac_usuario" value="">
 									<input type="text" style="text-align: center;" readonly="readonly" name="txt_fac_usuario" id="txt_fac_usuario" placeholder="" value="" readonly="readonly">							
 								</td>
 							</tr>
 							<tr>
 								<td>
 									<label for="cb_fac_tipoTransaccion">5. Tipo de Transacci&oacute;n:</label>								
-									<select name="cb_fac_tipoTransaccion" id="cb_fac_tipoTransaccion" data-theme="b">
-										<option value="">(Seleccione)</option>
-										<option value="1">Pago de Préstamo</option>
-										<option value="2">Depósito de Ahorro</option>
-										<option value="3">Nota de Cobro</option>
-										<option value="4">Seguro sobre Déuda</option>
-										<option value="5">Avalúos</option>
-										<option value="6">Remesas</option>
-									</select>
+									<select name="cb_fac_tipoTransaccion" id="cb_fac_tipoTransaccion" data-theme="b"></select>
 								</td>
 								<td>
 									<label for="txt_fac_tipoTrans">6. Número de Cuenta:</label>
@@ -1197,6 +1303,15 @@
 								</td>
 							</tr>
 							<tr>
+								<td colspan="2">&nbsp;</td>
+								<td>
+								<div style="width:100%;">
+										<a id="lnkFactDeta" data-theme="b" data-role="button" class="ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" 
+										href="#" role="button" onclick="agregarLineasFactura();return false;">Agregar</a>
+									</div>
+								</td>
+							</tr>
+							<tr>
 								<td>
 									<div>
 										<label for="img_factura">8. Captura del Recibo:</label>
@@ -1204,10 +1319,7 @@
 										<input type="hidden" id="img_factura_hd" value=""/>
 									</div>
 									<br />
-									<div style="width:100%;">
-										<a id="lnkFactDeta" data-theme="b" data-role="button" class="ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" 
-										href="#" role="button" onclick="agregarLineasFactura();return false;">Agregar</a>
-									</div>
+									
 								</td>
 								<td colspan="2">
 									<table id="tbl-deta-fac" style="width: 100%">
@@ -1257,8 +1369,8 @@
 			<div data-role="footer" data-position="fixed">			
 				<div data-role="navbar">
 					<ul>
-						<li><a data-theme="b" href="#" onclick="var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
-						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_facturacion');return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="limpiarForm('div_facturacion'); var r = confirm('¿Desea salir del formulario?');if(r == true){irOpcion('principal');return false;}"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+						<li><a data-theme="b" href="#" onclick="guardarFormulario('div_facturacion', this);return false;"><img src="images/bot-guardar.png" width="176" height="38" border="0" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -1269,31 +1381,50 @@
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
+				<div class="content">
 					<div class="box-productos1">
-							<h1>Selección de Producto Financiero para: </h1>
-							<div class="box-productos2"><span id="productos_nombreCliente"></span> <img src="images/photo.png" width="53" height="45" /></div></div>
-						<div class="detalle-cliente">
-							<h2 style="display: inline-block;width: 40%;">Solicitudes de Crédito Ingresadas:</h2> <span class="info_ingresos" id="lnkPrdCrd"><span id='sol_credit_ing'>0</span> crédito(s)</span><br />
-							<h2 style="display: inline-block;width: 40%;">Solicitudes de Cuenta de Ahorros:</h2> <span class="info_ingresos" id="lnkPrdAho"><span id='sol_cue_ahorro'>0</span> solicitud(es)</span><br />
-							<h2 style="display: inline-block;width: 40%;">Solicitudes de Depósitos:</h2> <span class="info_ingresos" id="lnkPrdDep"><span id='sol_depos'>0</span> solicitud(es)</span><br />
-							<h2 style="display: inline-block;width: 40%;">Solicitudes de Remesas:</h2> <span class="info_ingresos" id="lnkPrdRem"><span id='sol_remesas'>0</span> solicitud(es)</span>
+						<h1>Selección de Producto Financiero para: </h1>
+						<div class="box-productos2"><span class="cliente" id="productos_nombreCliente"></span> <img src="images/photo.png" width="53" height="45" /></div>
 					</div>
-					<div class="bot-procreditos">
-						<img src="images/ico-sol-credito.png" onclick="limpiarForm('div_datosCreditos');irOpcion('creditos');return false;"/>
-				  	</div>
-				    <div class="bot-procuentas">
-						<img src="images/ico-sol-ahorros.png" onclick="limpiarForm('div_ahorros'); irOpcion('ahorros');return false;"/>
-				  	</div>
-				  	<div class="bot-prodepositos">
-						<img src="images/ico-sol-deposito.png" onclick="limpiarForm('div_depositosPlazo'); irOpcion('depositosPlazo');return false;"/>
-				  	</div>
-					
-			</div><!-- /content -->
+					<div id="botons">
+						<div class="btns" style="cursor:pointer;" >
+							<div class="num"><span id='sol_credit_ing'>0</span></div>
+							<div class="text">Solicitudes de Crédito</div>
+						</div>
+
+						<div class="btns" style="cursor:pointer;" >
+							<div class="num"><span id='sol_cue_ahorro'>0</span></div>
+							<div class="text">Cuentas de Ahorro</div>
+						</div>
+						<div class="btns" style="cursor:pointer;" >
+							<div class="num"><span id='sol_depos'>0</span></div>
+							<div class="text">Depósitos a <br>Plazo</div>
+						</div>
+						<div class="btns bt-right" style="cursor:pointer;" >
+							<div class="num"><span id='sol_remesas'>0</span></div>
+							<div class="text">Solicitudes de Remesas</div>
+						</div>
+					</div>
+					<div class="content-2">
+						<div class="bot-procreditos" onclick="limpiarForm('div_datosCreditos');irOpcion('creditos');return false;" style="cursor:pointer;" >
+							<img src="images/ico-sol-credito.png" width="211" height="201" />
+						</div>
+						<div class="bot-procuentas" onclick="limpiarForm('div_ahorros'); irOpcion('ahorros');return false;" style="cursor:pointer;" >
+							<img src="images/ico-sol-ahorros.png" width="211" height="201" />
+						</div>
+						<div class="bot-prodepositos" onclick="limpiarForm('div_depositosPlazo'); irOpcion('depositosPlazo');return false;" style="cursor:pointer;" >
+							<img src="images/ico-sol-deposito.png" width="211" height="201" />
+						</div>
+
+					</div>
+				</div><!-- /content -->
+			</div>
 			<div data-role="footer" data-position="fixed">			
 				<div data-role="navbar">
 					<ul>
@@ -1302,13 +1433,15 @@
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE client_product_list -->
 		<div data-role="page" data-theme="a" class="bg-interna2" id="pag_client_product_list">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -1318,41 +1451,41 @@
 				<div class="cuerpo-interna" style="overflow: scroll;height: 520px;">
 				    <div class="box-productos1" style="position:relative;top:0;left: 20px;">
 						<div class="box-productos2">
-							<span id="lbl_cliNomb"></span><img src="images/photo.png" width="53" height="45" style="top: 8px;">
+							<span class="cliente"  id="lbl_cliNomb"></span><img src="images/photo.png" width="53" height="45" style="top: 8px;">
 						</div>
 					</div>
 					<div style="width:95%;margin:0 auto;" id="grid-clients" class="grid-view">
 						<table class="items table table-striped table-bordered">
 							<thead>
 								<tr id="head-credito">
-									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c0">Solicitud</th>
 									<th id="grid-clients_c1">Producto</th>
-									<th id="grid-clients_c2">Monto Solicitado</th>
+									<th id="grid-clients_c2">Monto</th>
 									<th id="grid-clients_c3">Plazo</th>
 									<th id="grid-clients_c4">Destino</th>
 									<th id="grid-clients_c5">Fecha</th>
 									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
 								</tr>
 								<tr id="head-ahorro" style="display:none;">
-									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c0">Solicitud</th>
 									<th id="grid-clients_c1">Producto</th>
-									<th id="grid-clients_c2">Monto de Apertura</th>
+									<th id="grid-clients_c2">Monto</th>
 									<th id="grid-clients_c5">Fecha</th>
 									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
 								</tr>
 								<tr id="head-deposito" style="display:none;">
-									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c0">Solicitud</th>
 									<th id="grid-clients_c1">Producto</th>
-									<th id="grid-clients_c2">Monto de Apertura</th>
+									<th id="grid-clients_c2">Monto</th>
 									<th id="grid-clients_c3">Plazo</th>
 									<th id="grid-clients_c5">Fecha</th>
 									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
 								</tr>
 								<tr id="head-remesa" style="display:none;">
-									<th id="grid-clients_c0">No. Solicitud</th>
+									<th id="grid-clients_c0">Solicitud</th>
 									<th id="grid-clients_c1">Tipo de Transaccion</th>
 									<th id="grid-clients_c2">MTCN</th>
-									<th id="grid-clients_c3">Pais de Envio</th>
+									<th id="grid-clients_c3">Pais de Envio (o Procedencia)</th>
 									<th id="grid-clients_c5">Fecha</th>
 									<th class="button-column" id="grid-clients_c6">&nbsp;</th>
 								</tr>
@@ -1370,13 +1503,15 @@
 				</div>
 			</div>
 		</div>
+		
 		<!-- PAGE garantias_list -->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_garantias_list">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -1477,18 +1612,18 @@
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
 
 				<div class="bg-sincronizar">
 					<h2></h2>
-					<div id="btn_sincro" class="bot-sincronizar"><img src="images/bot-i-sincronizar.png" width="176" height="38" onclick="enviarDatosAWeb(); return false;"/></div>
-					<div class="fecha-sincro">Última Sincronización:  <span id="sp_fec_sincronizacion"></span><input type="hidden" name="lstdSincro" id="lstdSincro" value=""></div>
+					<div class="fecha-sincro" style="height: 55px;font-size: 24px;">Última Sincronización:  <span id="sp_fec_sincronizacion"></span><input type="hidden" name="lstdSincro" id="lstdSincro" value=""></div>
 				</div>
-				<div id="msgSincro" style="width:40%;margin:0 auto; color:green"></div>
+				<div id="msgSincro" style="width: 800px;margin: 0 auto;height: 40px;text-align: center;"></div>
 				<div class="sel-sincronizar">
 					<h2>Opciones de Sincronización:</h2>
 					<div id="div_btn_datosSincro">
@@ -1514,8 +1649,16 @@
 							<div class="ui-block-b"><input data-icon="alert" value="10) CIIU" type="button" onclick="sincronizarTablas('ciiu'); return false;"></div>
 							<div class="ui-block-a"><input data-icon="alert" value="11) Destino/Rubro/Actividades" type="button" onclick="sincronizarTablas('destino'); return false;"></div>
 							<div class="ui-block-b"><input data-icon="alert" value="12) Departamento/Municipio/Aldea" type="button" onclick="sincronizarTablas('departamento'); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="13) Facturación" type="button" onclick="sincronizarTablas('internas'); return false;"></div>
+						</div>
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><input data-icon="alert" value="Administración" type="button" onclick="irOpcion('avanzado'); return false;"></div>
 						</div>
 					</div>
+				</div>
+				<div id="btn_sincro" class="bot-sincronizar" style="padding-left: 15px;">
+					<img src="images/bot-sincronizar-agencia.png" width="307" height="78" onclick="enviarDatosAWeb(this, 'wifi'); return false;" style="margin-right: 70px;">
+					<img src="images/bot-sincronizar-internet.png" width="307" height="78" onclick="enviarDatosAWeb(this, '3g'); return false;" style="margin-left: 75px;">
 				</div>
 				<div data-role="popup" id="popupResult" class="ui-content ui-corner-all" data-theme="b">
 				  <p id="contentPop">&nbsp;</p>
@@ -1529,13 +1672,68 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- PAGE actualizarFormularios -->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_actualizarform">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+
+				<div class="bg-sincronizar">
+					<h2></h2>
+					<div class="fecha-sincro" style="height: 55px;font-size: 24px;">Última Sincronización:  <span id="sp_fec_sincronizacion5"></span></div>
+				</div>
+				<div class="sel-sincronizar">
+					<h2>Opciones de Sincronización:</h2>
+					<div id="div_btn_formDinamicos2">
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><input data-icon="alert" value="1) Form Datos Clientes" type="button" onclick="sincronizarFormDinamicos(1); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="5) Form Solicitud de Credito" type="button" onclick="sincronizarFormDinamicos(2); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="2) Form Aperturas Cuentas de Ahorro" type="button" onclick="sincronizarFormDinamicos(3); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="6) Form Garantia Fiduciaria" type="button" onclick="sincronizarFormDinamicos(5); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="3) Form Aperturas Depositos a Plazo" type="button" onclick="sincronizarFormDinamicos(4); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="7) Form Garantia Hipotecaria" type="button" onclick="sincronizarFormDinamicos(6); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="4) Form de Remesas" type="button" onclick="sincronizarFormDinamicos(8); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="8) Form Garantia Prendaria" type="button" onclick="sincronizarFormDinamicos(7); return false;"></div>
+						</div>
+						
+						<h2>Sincronizaciones Especiales</h2>
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><input data-icon="alert" value="9) Productos" type="button" onclick="sincronizarTablas('productos'); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="10) CIIU" type="button" onclick="sincronizarTablas('ciiu'); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="11) Destino/Rubro/Actividades" type="button" onclick="sincronizarTablas('destino'); return false;"></div>
+							<div class="ui-block-b"><input data-icon="alert" value="12) Departamento/Municipio/Aldea" type="button" onclick="sincronizarTablas('departamento'); return false;"></div>
+							<div class="ui-block-a"><input data-icon="alert" value="13) Facturación" type="button" onclick="sincronizarTablas('internas'); return false;"></div>
+						</div>
+					</div>
+				</div>
+				<div data-role="popup" id="popupResult2" class="ui-content ui-corner-all" data-theme="b">
+				  <p id="contentPop2">&nbsp;</p>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
 		<!-- PAGE mensajeExitos-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_msgExitos">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -1570,13 +1768,15 @@
 				</div>
 			</div>
 		</div> 
+		
 		<!-- PAGE mensajeResumenTransferencias-->
 		<div data-role="page" data-theme="a" class="bg-interna" id="pag_msgResumenTrans">
 			<div class="interna">
 				<div class="header">
 					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
 					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
-					<div class="bot-sup"><a href="#" onclick="irOpcion('buscar');return false;"><img src="images/ico-buscar.png" width="26" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
 					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
 				</div>
@@ -1603,6 +1803,7 @@
 				</div>
 			</div>
 		</div>		
+		
 		<!-- PAGE Notas -->
 		<div data-role="page" data-theme="a" data-dialog="true" id="pag_notas">
 			<div data-role="header" data-theme="a" role="banner" class="ui-header ui-bar-a">
@@ -1616,23 +1817,84 @@
 			</div>
 		</div>
 		
-		<script type="text/javascript" src="js/fastclick.js"></script>
- 		<script type="text/javascript" src="cordova.js"></script>
+		<!-- PAGE Administrador QUERYS-->
+		<div data-role="page" data-theme="a" class="bg-interna" id="pag_avanzado">
+			<div class="interna">
+				<div class="header">
+					<div class="logo-home"><a href="#" onclick="irOpcion('principal');return false;"><img src="images/ico-logito.png" width="112" height="28" border="0" /></a></div>
+					<div class="logo-home user-info">Usuario: <span class="lblUser"></span></div>
+					<div class="bot-sup-lo"><a href="#" onclick="irOpcion('logout');return false;"><img src="images/ico-logout.png" width="23" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('actualizarform');return false;"><img src="images/ico-actualizar.png" width="34" height="26" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('sincronizar');return false;"><img src="images/ico-sincronizar.png" width="26" height="23" border="0" /></a></div>
+					<div class="bot-sup"><a href="#" onclick="irOpcion('notas');return false;"><img src="images/ico-notas.png" width="23" height="26" border="0" /></a></div>
+				</div>
+				<div class="head-clientes">
+					<div class="titulo-categoria"><img src="images/ico-categoria01.png" width="89" height="70" align="absmiddle" /> Avanzado</div>
+				</div>
+				<div role="main" class="cuerpo-interna" id="div_avanzado">
+					<div style="width:95%;margin:auto;">
+					<p>Interacción con la base de datos</p>
+					<div id="query">
+						<div>Tablas del Sistema: <span id="detectTables"></span></div>
+						<textarea></textarea>
+						<button id="btnExecQuery" onclick="executeQuery(this);" data-theme="b" style="width:25%;float:right;">Ejecutar</button>
+					</div>
+					<div id="queryResult" style="width:100%;overflow:auto;">
+						<table id="tableResult" data-role="table" class="ui-responsive">
+							<thead id="resultHeader">
+								
+							</thead>
+							<tbody id="resultBody">
+								
+							</tbody>
+						</table>
+					</div>
+					<div id="queryExecute"></div>
+					</div>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">			
+				<div data-role="navbar">
+					<ul>
+						<li><a data-theme="b" href="#" onclick="irOpcion('principal');return false;"><img src="images/bot-regresar.png" width="176" height="38" border="0" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Javascript -->
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+		<script type="text/javascript" src="js/fastclick.js"></script>
 		<script type="text/javascript" src="js/jquery.mask.min.js"></script>
 		<script type="text/javascript" src="js/jquery.numbox-1.1.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery.autoNumeric.js"></script>
 		<!-- Agregando elemento para paginado -->
 		<script type="text/javascript" src="js/iscroll.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile.iscrollview.js"></script>
+		<!-- agregamos elementos para datepicker -->
+		<script type="text/javascript" src="js/jquery.datebox.js"></script>
+		
+		<script type="text/javascript" src="cordova.js"></script>
+		
 		<!-- Desarrollo de la aplicacion -->
         <script type="text/javascript" src="js/app_complemento.js"></script>
 		<script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/objectCliente.js"></script>
+		<script type="text/javascript" src="js/bricklr.min.js"></script>
         <script type="text/javascript">
        		var sinRepeticion = 0;//varible global, para controlar solo una vez las cargas de datos
             app.initialize();
-        </script>            
+        </script>
+		<script type="text/javascript">
+			window.onerror = function(msg, url, line) {
+				var idx = url.lastIndexOf("/");
+				if(idx > -1) {url = url.substring(idx+1);}
+				//alert("ERROR in " + url + " (line #" + line + "): " + msg);
+				//return false; //suppress Error Alert;
+				console.log("ERROR in " + url + " (line #" + line + "): " + msg);
+			};
+		</script>		
+
     </body>
 </html>

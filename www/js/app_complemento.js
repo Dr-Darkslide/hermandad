@@ -87,6 +87,79 @@ function calcular_edad(fecha){
 
     return edad
 } 
+
+function existeFecha(fecha) {
+      var dtCh= "/";
+	var minYear=1900;
+	var maxYear=2100;
+	function isInteger(s){
+		var i;
+		for (i = 0; i < s.length; i++){
+			var c = s.charAt(i);
+			if (((c < "0") || (c > "9"))) return false;
+		}
+		return true;
+	}
+	function stripCharsInBag(s, bag){
+		var i;
+		var returnString = "";
+		for (i = 0; i < s.length; i++){
+			var c = s.charAt(i);
+			if (bag.indexOf(c) == -1) returnString += c;
+		}
+		return returnString;
+	}
+	function daysInFebruary (year){
+		return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+	}
+	function DaysArray(n) {
+		for (var i = 1; i <= n; i++) {
+			this[i] = 31
+			if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
+			if (i==2) {this[i] = 29}
+		}
+		return this
+	}
+	function isDate(dtStr){
+		var daysInMonth = DaysArray(12)
+		var pos1=dtStr.indexOf(dtCh)
+		var pos2=dtStr.indexOf(dtCh,pos1+1)
+		var strDay=dtStr.substring(0,pos1)
+		var strMonth=dtStr.substring(pos1+1,pos2)
+		var strYear=dtStr.substring(pos2+1)
+		strYr=strYear
+		if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+		if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+		for (var i = 1; i <= 3; i++) {
+			if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+		}
+		month=parseInt(strMonth)
+		day=parseInt(strDay)
+		year=parseInt(strYr)
+		if (pos1==-1 || pos2==-1){
+			return false
+		}
+		if (strMonth.length<1 || month<1 || month>12){
+			return false
+		}
+		if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+			return false
+		}
+		if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+			return false
+		}
+		if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+			return false
+		}
+		return true
+	}
+	if(isDate(fecha)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 //Fin Funciones de Tiempos
 
 // Funcion Moneda
@@ -106,17 +179,49 @@ function crearTablas(db){
 	db.transaction(function(tx) {
 		tx.executeSql("SELECT COUNT(1) FROM DEPARTAMENTO", [],function(tx, results){//
 			console.log('Tablas ya creadas.');
-			tx.executeSql("CREATE TABLE IF NOT EXISTS LOGS(ID_LOG INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,TAREA TEXT,FECHA TEXT)");
+			//tx.executeSql("ALTER TABLE STORAGE ADD COLUMN COD_SESS text");
+			//tx.executeSql("CREATE TABLE IF NOT EXISTS LOGS(ID_LOG INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,TAREA TEXT,FECHA TEXT)");
+			/*
+			tx.executeSql("CREATE TABLE IF NOT EXISTS CAMBIOS_TABLAS(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,TABLA TEXT,CAMPO TEXT, STATUS INT DEFAULT 0)", [],function(tx, results){
+				tx.executeSql("SELECT * FROM CAMBIOS_TABLAS WHERE TABLA='GARANTIAS' AND CAMPO='ELIMINADA'", [],function(tx, results){
+					if(results.rows.length == 0) {
+						tx.executeSql("INSERT OR REPLACE INTO CAMBIOS_TABLAS(ID, TABLA, CAMPO, STATUS) VALUES(1, 'GARANTIAS','ELIMINADA', 0)");
+					}
+				});
+			});
+			tx.executeSql("SELECT STATUS FROM CAMBIOS_TABLAS WHERE TABLA='GARANTIAS' AND CAMPO='ELIMINADA'", [],function(tx, results){
+				if(results.rows.length > 0) {
+					if(results.rows.item(0).STATUS == null || results.rows.item(0).STATUS == 0){
+						tx.executeSql("UPDATE CAMBIOS_TABLAS SET STATUS=1 WHERE TABLA='GARANTIAS' AND CAMPO='ELIMINADA'");
+						tx.executeSql("ALTER TABLE GARANTIAS ADD COLUMN ELIMINADA INT DEFAULT 0");
+					} else {
+						console.log('campos ya actualizados.');
+					}
+				}
+			});
+			*/
 		},function(tx){
 			console.log('Inicio de creacion y poblacion de tablas.');
 			tx.executeSql("CREATE TABLE IF NOT EXISTS LOGS(ID_LOG INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,TAREA TEXT,FECHA TEXT)");
-			tx.executeSql("CREATE TABLE IF NOT EXISTS USERLOGIN(NOMBRE text DEFAULT '',PASS text DEFAULT '',USERID text DEFAULT '',ROLENAME text DEFAULT '',COMPANYNAME text DEFAULT '',COMPANYID text DEFAULT '',COMPANYPLACE text DEFAULT '',LOGEADO text,MENSAJE text)", [],function(tx, results){
+			tx.executeSql("CREATE TABLE IF NOT EXISTS USERLOGIN(NOMBRE text DEFAULT '',NOMBRE_COMPLETO TEXT DEFAULT '',PASS text DEFAULT '',USERID text DEFAULT '',ROLENAME text DEFAULT '',COMPANYNAME text DEFAULT '',COMPANYID text DEFAULT '',COMPANYPLACE text DEFAULT '',LOGEADO text,MENSAJE text, FECHAMENSAJE text)", [],function(tx, results){
 				tx.executeSql("INSERT INTO USERLOGIN(LOGEADO) VALUES('N')");
 			});
 			tx.executeSql("CREATE TABLE IF NOT EXISTS NOTAS(ID_NOTA INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,NOTA TEXT,USER_ID INTEGER)");
 			tx.executeSql("CREATE TABLE IF NOT EXISTS SINCRONIZACIONES(ID_SINCRO INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,PERFILES TEXT,SOLICITUDES TEXT,IMAGENES TEXT,USER_ID INTEGER,FECHA_SINCRO TEXT)");
 			tx.executeSql("CREATE TABLE IF NOT EXISTS FOTOS(ID_FOTO INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,ID_IMG TEXT,FOTO TEXT,ID_STORAGE INTEGER)");
+			tx.executeSql("CREATE TABLE IF NOT EXISTS FAC_TRANSACCION(ID INTEGER NOT NULL, NOMBRE TEXT)", [],function(tx, results){
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(1,'PAGO A PRÉSTAMO')");
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(2,'DEPÓSITO DE AHORRO')");
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(3,'NOTA DE COBRO')");
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(4,'SEGURO SOBRE DEUDA')");
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(5,'AVALÚOS')");
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(6,'REMESAS')");
+				tx.executeSql("INSERT INTO FAC_TRANSACCION(ID, NOMBRE) VALUES(7,'RECARGA CELULAR')");
+			});
 			tx.executeSql("CREATE TABLE IF NOT EXISTS CAP_CUSTOMER(ID_CAP_CUSTOMER INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,AGENCIA INTEGER, FIRSTNAME TEXT, MIDNAME TEXT, LASTNAME1 TEXT,LASTNAME2 TEXT,TYPE_IDENTITY INTEGER,IDENTITY TEXT,GENDER INTEGER,BIRTHDAY TEXT,STATUS INTEGER,NATIONALITY TEXT,OCUPATION INTEGER,EDUCATION INTEGER,PATRIMONY REAL,ACTIVE INTEGER,DATE_CREATED TEXT,DATE_UPDATED TEXT,ID_SERVER INTERGER)");
+			tx.executeSql('CREATE INDEX IF NOT EXISTS index_cap_customer_id_cap_customer_idx on CAP_CUSTOMER (ID_CAP_CUSTOMER)');
+			tx.executeSql('CREATE INDEX IF NOT EXISTS index_cap_customer_firstname_idx on CAP_CUSTOMER (FIRSTNAME)');
+			tx.executeSql('CREATE INDEX IF NOT EXISTS index_cap_customer_lastname_idx on CAP_CUSTOMER (LASTNAME1)');
 			tx.executeSql("CREATE TABLE IF NOT EXISTS FORMULARIOS(ID_FORMULARIO integer NOT NULL PRIMARY KEY AUTOINCREMENT,NOMBRE text,ID_DIV text NOT NULL,HTML text,FECHA_SINCRO text)", [],function(tx, results){
 				tx.executeSql("INSERT INTO FORMULARIOS(NOMBRE,ID_DIV) VALUES('Formulario Datos Clientes', 'div_datosGenerales')");
 				tx.executeSql("INSERT INTO FORMULARIOS(NOMBRE,ID_DIV) VALUES('Formulario Solicitud de Credito', 'div_datosCreditos')");
@@ -129,10 +234,12 @@ function crearTablas(db){
 				tx.executeSql("INSERT INTO FORMULARIOS(NOMBRE,ID_DIV) VALUES('Evaluacion Financiera', 'div_evalFinanciera')");
 				tx.executeSql("INSERT INTO FORMULARIOS(NOMBRE,ID_DIV) VALUES('Resoluciones', 'div_resolucion')");
 			});
-			tx.executeSql("CREATE TABLE IF NOT EXISTS GARANTIAS(ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, ID_SOL INTEGER DEFAULT 0,ID_GAR integer, STATE integer DEFAULT 0,ID_USER INTEGER,DATE_CREATED text)");
-			tx.executeSql("CREATE TABLE IF NOT EXISTS STORAGE(ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, CUSTOMER_REQUESTS integer DEFAULT 0,FORM integer, SUB_FORM integer DEFAULT 0, FORM_PROD INTEGER DEFAULT 0, FORM_RESPONSE text,DATE_CREATED text,DATE_UPDATED text,ID_DIV text NOT NULL, ID_FORM_SERVER INTERGER, ID_FORM_SERVER_R INTEGER)");
+			tx.executeSql("CREATE TABLE IF NOT EXISTS GARANTIAS(ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, ID_SOL INTEGER DEFAULT 0,ID_GAR integer, STATE integer DEFAULT 0,ID_USER INTEGER,ELIMINADA INT DEFAULT 0,DATE_CREATED text)");
+			tx.executeSql("CREATE TABLE IF NOT EXISTS STORAGE(ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, CUSTOMER_REQUESTS integer DEFAULT 0,FORM integer, SUB_FORM integer DEFAULT 0, FORM_PROD INTEGER DEFAULT 0, FORM_RESPONSE text,DATE_CREATED text,DATE_UPDATED text,ID_DIV text NOT NULL, ID_FORM_SERVER INTERGER, ID_FORM_SERVER_R INTEGER, COD_SESS text)");
+			tx.executeSql('CREATE INDEX IF NOT EXISTS index_storage_customer_requests_idx on STORAGE (CUSTOMER_REQUESTS)');
+			tx.executeSql('CREATE INDEX IF NOT EXISTS index_storage_form_response_idx on STORAGE (FORM_RESPONSE)');
 			
-			tx.executeSql("CREATE TABLE IF NOT EXISTS DEPARTAMENTO(ID_DEP integer NOT NULL PRIMARY KEY,CODE integer,NOMBRE text)", [],function(tx, results){
+			tx.executeSql("CREATE TABLE IF NOT EXISTS DEPARTAMENTO(ID_DEP integer NOT NULL, CODE integer,NOMBRE text)", [],function(tx, results){
 				tx.executeSql("INSERT INTO DEPARTAMENTO(ID_DEP,CODE,NOMBRE) VALUES(1, 1, 'ATLANTIDA')");
 				tx.executeSql("INSERT INTO DEPARTAMENTO(ID_DEP,CODE,NOMBRE) VALUES(2, 2, 'COLON')");
 				tx.executeSql("INSERT INTO DEPARTAMENTO(ID_DEP,CODE,NOMBRE) VALUES(3, 3, 'COMAYAGUA')");
@@ -154,7 +261,7 @@ function crearTablas(db){
 				tx.executeSql("INSERT INTO DEPARTAMENTO(ID_DEP,CODE,NOMBRE) VALUES(19, 99, 'POR DEFINIR / PARA MIGRACION')");
 				tx.executeSql("INSERT INTO DEPARTAMENTO(ID_DEP,CODE,NOMBRE) VALUES(20, 99, 'POR DEFINIR / PARA MIGRACION')");
 			});
-			tx.executeSql("CREATE TABLE IF NOT EXISTS MUNICIPIO(ID_MUN integer NOT NULL PRIMARY KEY,CODE integer,NOMBRE text,ID_DEP integer)", [],function(tx, results){
+			tx.executeSql("CREATE TABLE IF NOT EXISTS MUNICIPIO(ID_MUN integer NOT NULL,CODE integer,NOMBRE text,ID_DEP integer)", [],function(tx, results){
 				tx.executeSql("INSERT INTO MUNICIPIO(ID_MUN,ID_DEP,CODE,NOMBRE) VALUES(1, 1, 2, 'EL PORVENIR')");
 				tx.executeSql("INSERT INTO MUNICIPIO(ID_MUN,ID_DEP,CODE,NOMBRE) VALUES(2, 1, 3, 'ESPARTA')");
 				tx.executeSql("INSERT INTO MUNICIPIO(ID_MUN,ID_DEP,CODE,NOMBRE) VALUES(3, 1, 5, 'LA MASICA')");
@@ -5152,7 +5259,7 @@ function crearTablas(db){
 					tx.executeSql("INSERT INTO ACT_ECO(ID_SUB_INV, ID_INV, ID_DEST, NOMBRE) VALUES('460', '00460', 21, 'SALARIO MENSUAL')");
 			});
 			
-			tx.executeSql("CREATE TABLE IF NOT EXISTS CIIU_SECTOR(ID_SECTOR text NOT NULL PRIMARY KEY, NOMBRE text)", [],function(tx, results){
+			tx.executeSql("CREATE TABLE IF NOT EXISTS CIIU_SECTOR(ID_SECTOR text NOT NULL, NOMBRE text)", [],function(tx, results){
 				tx.executeSql("INSERT INTO CIIU_SECTOR (ID_SECTOR, NOMBRE) VALUES('A', 'AGRICULTURA, GANADERÍA, CAZA Y SILVICULTURA');");
 				tx.executeSql("INSERT INTO CIIU_SECTOR (ID_SECTOR, NOMBRE) VALUES('B', 'PESCA Y SERVICIOS CONEXOS');");
 				tx.executeSql("INSERT INTO CIIU_SECTOR (ID_SECTOR, NOMBRE) VALUES('C', 'EXPLOTACIÓN DE MINAS Y CANTERAS');");
@@ -8086,7 +8193,10 @@ function crearTablas(db){
 							userLoginGlobal.setCompanyName(results.rows.item(0).COMPANYNAME);
 							userLoginGlobal.setCompanyId(results.rows.item(0).COMPANYID);
 							userLoginGlobal.setCompanyPlace(results.rows.item(0).COMPANYPLACE);
+							userLoginGlobal.setNombreCompleto(results.rows.item(0).NOMBRE_COMPLETO);
+							
 							$('#sp_mensaje').html(results.rows.item(0).MENSAJE);
+							$('#fh_publicacion').html(results.rows.item(0).FECHAMENSAJE);
 							
 							if(results.rows.item(0).ROLENAME == "admonGears"){
 								$('#div_btn_formDinamicos').show();
@@ -8097,6 +8207,7 @@ function crearTablas(db){
 								$('#div_btn_datosSincro').show();
 								$('#btn_sincro').show();
 							}
+							$('.lblUser').html(results.rows.item(0).USERID);
 							$.mobile.loading("hide");
 							irOpcion('principal');
 						}
