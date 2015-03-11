@@ -9,6 +9,7 @@
 	<author href="http://www.arkad.com.sv" email="info@arkad.com.sv">Arkad Studio</author>
 <!-- Main Configuration -->
 <gap:config-file platform="android" parent="/manifest">
+	<application android:debuggable="true" />
 	<activity android:launchMode="singleInstance" android:alwaysRetainTaskState="true" android:configChanges="locale|keyboard|keyboardHidden|orientation" />
 </gap:config-file>
 <!--
